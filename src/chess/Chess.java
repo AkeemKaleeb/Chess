@@ -30,6 +30,47 @@ public class Chess {
 	 */
 	public static void start() {
 		/* FILL IN THIS METHOD */
-		
+		ArrayList<ReturnPiece> pieces = initializePieces();
+		PlayChess.printBoard(pieces);
 	}
+
+	private static ArrayList<ReturnPiece> initializePieces() {
+        ArrayList<ReturnPiece> pieces = new ArrayList<>();
+
+        // Set up white pieces
+        pieces.add(createPiece(ReturnPiece.PieceType.WR, ReturnPiece.PieceFile.a, 1));
+        pieces.add(createPiece(ReturnPiece.PieceType.WN, ReturnPiece.PieceFile.b, 1));
+        pieces.add(createPiece(ReturnPiece.PieceType.WB, ReturnPiece.PieceFile.c, 1));
+        pieces.add(createPiece(ReturnPiece.PieceType.WQ, ReturnPiece.PieceFile.d, 1));
+        pieces.add(createPiece(ReturnPiece.PieceType.WK, ReturnPiece.PieceFile.e, 1));
+        pieces.add(createPiece(ReturnPiece.PieceType.WB, ReturnPiece.PieceFile.f, 1));
+        pieces.add(createPiece(ReturnPiece.PieceType.WN, ReturnPiece.PieceFile.g, 1));
+        pieces.add(createPiece(ReturnPiece.PieceType.WR, ReturnPiece.PieceFile.h, 1));
+        for (ReturnPiece.PieceFile file : ReturnPiece.PieceFile.values()) {
+            pieces.add(createPiece(ReturnPiece.PieceType.WP, file, 2));
+        }
+
+        // Set up black pieces
+        pieces.add(createPiece(ReturnPiece.PieceType.BR, ReturnPiece.PieceFile.a, 8));
+        pieces.add(createPiece(ReturnPiece.PieceType.BN, ReturnPiece.PieceFile.b, 8));
+        pieces.add(createPiece(ReturnPiece.PieceType.BB, ReturnPiece.PieceFile.c, 8));
+        pieces.add(createPiece(ReturnPiece.PieceType.BQ, ReturnPiece.PieceFile.d, 8));
+        pieces.add(createPiece(ReturnPiece.PieceType.BK, ReturnPiece.PieceFile.e, 8));
+        pieces.add(createPiece(ReturnPiece.PieceType.BB, ReturnPiece.PieceFile.f, 8));
+        pieces.add(createPiece(ReturnPiece.PieceType.BN, ReturnPiece.PieceFile.g, 8));
+        pieces.add(createPiece(ReturnPiece.PieceType.BR, ReturnPiece.PieceFile.h, 8));
+        for (ReturnPiece.PieceFile file : ReturnPiece.PieceFile.values()) {
+            pieces.add(createPiece(ReturnPiece.PieceType.BP, file, 7));
+        }
+
+        return pieces;
+    }
+
+    private static ReturnPiece createPiece(ReturnPiece.PieceType type, ReturnPiece.PieceFile file, int rank) {
+        ReturnPiece piece = new ReturnPiece();
+        piece.pieceType = type;
+        piece.pieceFile = file;
+        piece.pieceRank = rank;
+        return piece;
+    }
 }
