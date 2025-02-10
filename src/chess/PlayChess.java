@@ -8,27 +8,25 @@ public class PlayChess {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		Scanner sc = new Scanner(System.in);
-		Chess.start();
+		Chess.start();                                  // Create the initial board
 		
 		String line = sc.nextLine();
-		while (!line.equals("quit")) {
-			if (line.equals("reset")) {
+		while (!line.equals("quit")) {         // Loop until user types "quit"
+			if (line.equals("reset")) {        // Reset the board
 				Chess.start();
 				System.out.println();
 				line = sc.nextLine();
 				continue;
 			}
-			// move 
-			ReturnPlay res = Chess.play(line);
+
+			ReturnPlay res = Chess.play(line);          // Play the move
 			
-			// print result message
-			if (res.message != null) {
+			if (res.message != null) {                  // Print result message
 				System.out.println("\n"+res.message);
 			}
 			System.out.println();
 			
-			// print result board
-			printBoard(res.piecesOnBoard);
+			printBoard(res.piecesOnBoard);              // Print result board
 			System.out.println();
 			
 			// next line

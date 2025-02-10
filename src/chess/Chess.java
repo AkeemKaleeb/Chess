@@ -1,6 +1,8 @@
 package chess;
 
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Chess {
 
@@ -20,6 +22,12 @@ public class Chess {
 	public static ReturnPlay play(String move) {
 
 		/* FILL IN THIS METHOD */
+
+		String cleanMove = sanitizeMove(move);
+		if (cleanMove == null) {
+			return null;
+		}
+		System.out.println("Playing move: " + cleanMove);
 		
 		/* FOLLOWING LINE IS A PLACEHOLDER TO MAKE COMPILER HAPPY */
 		/* WHEN YOU FILL IN THIS METHOD, YOU NEED TO RETURN A ReturnPlay OBJECT */
@@ -75,4 +83,22 @@ public class Chess {
         piece.pieceRank = rank;
         return piece;
     }
+
+	private static String sanitizeMove(String move) {
+		move = move.trim().toLowerCase();
+		move = move.replaceAll("\\s+", " ");
+
+		// RegEx to match format
+		Pattern pattern = Pattern.compile("^[a-h][1-8] [a-h][1-8]( [BNRQ])?$", Pattern.CASE_INSENSITIVE);
+		Matcher matcher = pattern.matcher(move);
+		if (matcher.matches()) {
+			// Ensure the optional third section remains in uppercase
+			if (move.length() > 5) {
+				return move.substring(0, 5) + move.substring(5).toUpperCase();
+			}
+			return move;
+		} else {
+			return null;
+		}
+	}
 }
