@@ -6,6 +6,8 @@ public class Chess {
 
         enum Player { white, black }
     
+	private static ArrayList<ReturnPiece> pieces;
+
 	/**
 	 * Plays the next move for whichever player has the turn.
 	 * 
@@ -30,7 +32,7 @@ public class Chess {
 	 */
 	public static void start() {
 		/* FILL IN THIS METHOD */
-		ArrayList<ReturnPiece> pieces = initializePieces();
+		pieces = initializePieces();
 		PlayChess.printBoard(pieces);
 	}
 
