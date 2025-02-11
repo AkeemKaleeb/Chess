@@ -25,6 +25,8 @@ public class Chess {
 
 		/* FILL IN THIS METHOD */
 
+		move = sanitizeMove(move);
+		
 		Position from = new Position(move.charAt(0), Character.getNumericValue(move.charAt(1)));
 		Position to = new Position(move.charAt(3), Character.getNumericValue(move.charAt(4)));
 		Piece piece = Board.getPieceAt(from);

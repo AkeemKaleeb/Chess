@@ -2,12 +2,12 @@ package chess;
 
 public class Knight extends Piece {
     
-    public Knight(Chess.Player owner, Position position) {
-        super(owner, position);
+    public Knight(Chess.Player owner, Position position, ReturnPiece.PieceType pieceType) {
+        super(owner, position, pieceType);
     }
 
     @Override
-    public boolean isValidMove(Position from, Position to, Board board) {
+    public boolean isValidMove(Position from, Position to) {
         // Check that the move is L-shaped
         if (Math.abs(from.getFile() - to.getFile()) == 2 && Math.abs(from.getRank() - to.getRank()) == 1) {
             return true;

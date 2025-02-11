@@ -3,15 +3,15 @@ package chess;
 public class Pawn extends Piece {
     private boolean isFirstMove = true;
 
-    public Pawn(Chess.Player owner, Position position) {
-        super(owner, position);
+    public Pawn(Chess.Player owner, Position position, ReturnPiece.PieceType pieceType) {
+        super(owner, position, pieceType);
     }
 
     @Override
-    public boolean isValidMove(Position from, Position to, Board board) {
+    public boolean isValidMove(Position from, Position to) {
         // Check that there are no pieces in the way
         if (from.getFile() == to.getFile()) {
-            if (board.getPieceAt(to) != null) {
+            if (Board.getPieceAt(to) != null) {
                 return false;
             }
         }
@@ -19,21 +19,21 @@ public class Pawn extends Piece {
         // Check for the first move of the pawn
         // Forward 2
         if (from.getFile() == to.getFile() && from.getRank() == to.getRank() + (owner.equals(Chess.Player.black) ? -2 : 2)
-            && board.getPieceAt(to) == null
-            && board.getPieceAt(new Position(from.getFile(), from.getRank() + (owner.equals(Chess.Player.black) ? -1 : 1))) == null
+            && Board.getPieceAt(to) == null
+            && Board.getPieceAt(new Position(from.getFile(), from.getRank() + (owner.equals(Chess.Player.black) ? -1 : 1))) == null
             && isFirstMove) {
             isFirstMove = false;
             return true;
         }
         // Forward 1
         if (from.getFile() == to.getFile() && from.getRank() == to.getRank() + (owner.equals(Chess.Player.black) ? -1 : 1)
-                && board.getPieceAt(to) == null) {
+                && Board.getPieceAt(to) == null) {
             isFirstMove = false;
             return true;
         }
         // Capture
         if (Math.abs(from.getFile() - to.getFile()) == 1 && from.getRank() == to.getRank() + (owner.equals(Chess.Player.black) ? -1 : 1)
-                && board.getPieceAt(to) != null) {
+                && Board.getPieceAt(to) != null) {
             isFirstMove = false;
             return true;
         }
