@@ -22,61 +22,77 @@ public class Chess {
 	 *         the contents of the returned ReturnPlay instance.
 	 */
 	public static ReturnPlay play(String move) {
+        move = sanitizeMove(move);
+        if (move == null) {
+            System.out.println("Invalid move format. Please use the format 'a# a#'.");
+            return createReturnPlay(null, ReturnPlay.Message.ILLEGAL_MOVE);
+        }
 
-		/* FILL IN THIS METHOD */
+        Position from = new Position(move.charAt(0) - 'a', Character.getNumericValue(move.charAt(1)) - 1);
+        Position to = new Position(move.charAt(3) - 'a', Character.getNumericValue(move.charAt(4)) - 1);
+        Piece piece = board.getPieceAt(from);
 
-		move = sanitizeMove(move);
-
-		Position from = new Position(move.charAt(0), Character.getNumericValue(move.charAt(1)));
-		Position to = new Position(move.charAt(3), Character.getNumericValue(move.charAt(4)));
-		Piece piece = board.getPieceAt(from);
-		if (piece != null) {
-			switch (piece.getClass().getSimpleName()) {
-				case "Pawn":
-					if (piece.isValidMove(from, to)) {
-						// Handle pawn move
-						return new ReturnPlay();
-					}
-					break;
-				case "Rook":
-					if (piece.isValidMove(from, to)) {
-						// Handle rook move
-					}
-					break;
-				case "Knight":
-					if (piece.isValidMove(from, to)) {
-						// Handle knight move
-					}
-					break;
-				case "Bishop":
-					if (piece.isValidMove(from, to)) {
-						// Handle bishop move
-					}
-					break;
-				case "Queen":
-					if (piece.isValidMove(from, to)) {
-						// Handle queen move
-					}
-					break;
-				case "King":
-					if (piece.isValidMove(from, to)) {
-						// Handle king move
-					}
-					break;
-				default:
-					// Handle unknown piece type
-					break;
-			}
-		}
-		/* FOLLOWING LINE IS A PLACEHOLDER TO MAKE COMPILER HAPPY */
-		/* WHEN YOU FILL IN THIS METHOD, YOU NEED TO RETURN A ReturnPlay OBJECT */
-		return null;
-	}
+        if (piece != null) {
+            switch (piece.getClass().getSimpleName()) {
+                case "Pawn":
+                    if (piece.isValidMove(from, to)) {
+                        // Handle pawn move
+                        System.out.println("Pawn move");
+                        board.movePiece(from, to);
+                        return createReturnPlay(board.getReturnPieces(), null);
+                    }
+                    break;
+                case "Rook":
+                    if (piece.isValidMove(from, to)) {
+                        // Handle rook move
+                        System.out.println("Rook move");
+                        board.movePiece(from, to);
+                        return createReturnPlay(board.getReturnPieces(), null);
+                    }
+                    break;
+                case "Knight":
+                    if (piece.isValidMove(from, to)) {
+                        // Handle knight move
+                        System.out.println("Knight move");
+                        board.movePiece(from, to);
+                        return createReturnPlay(board.getReturnPieces(), null);
+                    }
+                    break;
+                case "Bishop":
+                    if (piece.isValidMove(from, to)) {
+                        // Handle bishop move
+                        System.out.println("Bishop move");
+                        board.movePiece(from, to);
+                        return createReturnPlay(board.getReturnPieces(), null);
+                    }
+                    break;
+                case "Queen":
+                    if (piece.isValidMove(from, to)) {
+                        // Handle queen move
+                        System.out.println("Queen move");
+                        board.movePiece(from, to);
+                        return createReturnPlay(board.getReturnPieces(), null);
+                    }
+                    break;
+                case "King":
+                    if (piece.isValidMove(from, to)) {
+                        // Handle king move
+                        System.out.println("King move");
+                        board.movePiece(from, to);
+                        return createReturnPlay(board.getReturnPieces(), null);
+                    }
+                    break;
+                default:
+                    // Handle unknown piece type
+                    System.out.println("Unknown piece type");
+                    break;
+            }
+        }
+        return createReturnPlay(null, ReturnPlay.Message.ILLEGAL_MOVE);
+    }
 	
 	
-	/**
-	 * This method should reset the game, and start from scratch.
-	 */
+	// This method should reset the game, and start from scratch.
 	public static void start() {
 		/* FILL IN THIS METHOD */
 		board = new Board();
@@ -100,5 +116,12 @@ public class Chess {
 		} else {
 			return null;
 		}
+	}
+
+	private static ReturnPlay createReturnPlay(ArrayList<ReturnPiece> pieces, ReturnPlay.Message message) {
+		ReturnPlay returnPlay = new ReturnPlay();
+		returnPlay.piecesOnBoard = pieces;
+		returnPlay.message = message;
+		return returnPlay;
 	}
 }

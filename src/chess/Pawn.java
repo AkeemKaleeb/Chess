@@ -18,21 +18,21 @@ public class Pawn extends Piece {
 
         // Check for the first move of the pawn
         // Forward 2
-        if (from.getFile() == to.getFile() && from.getRank() == to.getRank() + (owner.equals(Chess.Player.black) ? -2 : 2)
+        if (from.getFile() == to.getFile() && from.getRank() == to.getRank() + (getOwner().equals(Chess.Player.black) ? -2 : 2)
             && board.getPieceAt(to) == null
-            && board.getPieceAt(new Position(from.getFile(), from.getRank() + (owner.equals(Chess.Player.black) ? -1 : 1))) == null
+            && board.getPieceAt(new Position(from.getFile(), from.getRank() + (getOwner().equals(Chess.Player.black) ? -1 : 1))) == null
             && isFirstMove) {
             isFirstMove = false;
             return true;
         }
         // Forward 1
-        if (from.getFile() == to.getFile() && from.getRank() == to.getRank() + (owner.equals(Chess.Player.black) ? -1 : 1)
+        if (from.getFile() == to.getFile() && from.getRank() == to.getRank() + (getOwner().equals(Chess.Player.black) ? -1 : 1)
                 && board.getPieceAt(to) == null) {
             isFirstMove = false;
             return true;
         }
         // Capture
-        if (Math.abs(from.getFile() - to.getFile()) == 1 && from.getRank() == to.getRank() + (owner.equals(Chess.Player.black) ? -1 : 1)
+        if (Math.abs(from.getFile() - to.getFile()) == 1 && from.getRank() == to.getRank() + (getOwner().equals(Chess.Player.black) ? -1 : 1)
                 && board.getPieceAt(to) != null) {
             isFirstMove = false;
             return true;

@@ -52,20 +52,28 @@ public class Board {
         ArrayList<ReturnPiece> returnPieces = new ArrayList<>();
         for (Piece piece : pieces) {
             ReturnPiece returnPiece = new ReturnPiece();
-            returnPiece.pieceType = piece.pieceType;
-            returnPiece.pieceFile = ReturnPiece.PieceFile.values()[piece.position.getFile() - 'a'];
-            returnPiece.pieceRank = piece.position.getRank();
+            returnPiece.pieceType = piece.getPieceType();
+            returnPiece.pieceFile = ReturnPiece.PieceFile.values()[piece.getPosition().getFile() - 'a'];
+            returnPiece.pieceRank = piece.getPosition().getRank();
             returnPieces.add(returnPiece);
+            System.out.println(returnPiece.toString());
         }
         return returnPieces;
     }
 
     public Piece getPieceAt(Position position) {
         for (Piece piece : pieces) {
-            if (piece.position.getFile() == position.getFile() && piece.position.getRank() == position.getRank()) {
+            if (piece.getPosition().getFile() == position.getFile() && piece.getPosition().getRank() == position.getRank()) {
                 return piece;
             }
         }
         return null;
+    }
+
+    public void movePiece(Position from, Position to) {
+        Piece piece = getPieceAt(from);
+        if (piece != null) {
+            piece.setPosition(to);
+        }
     }
 }
