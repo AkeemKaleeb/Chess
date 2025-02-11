@@ -1,3 +1,5 @@
+// Kaileb Cole (KJC265), Maxime Deperrois (MDD182)
+
 package chess;
 
 import java.util.ArrayList;
@@ -45,7 +47,7 @@ public class Chess {
 	}
 
 	private static ArrayList<ReturnPiece> initializePieces() {
-        ArrayList<ReturnPiece> pieces = new ArrayList<>();
+        pieces = new ArrayList<>();
 
         // Set up white pieces
         pieces.add(createPiece(ReturnPiece.PieceType.WR, ReturnPiece.PieceFile.a, 1));

@@ -2,3 +2,98 @@ This is Project 1 of CS 213
 Information can be found at https://www.cs.rutgers.edu/courses/213/classes/spring_2025_venugopal/chess/chess.html
 
 Partners: Kaileb Cole (KJC265), Maxime Deperrois (MDD182)
+
+**Development Plan**:
+**Board Instantiation**
+**Movement**:
+    - Input Sanitization
+    - Input Handling
+        - Illegal Moves
+    - Special Moves
+        - Castling
+        - Promotion
+        - Resign
+        - Draw
+**Win Conditions:**    
+    - Checkmate
+    - Resign
+    - Draw
+    - Checks
+
+**Architecture**:
+Chess.java (Game Manager)
+    - Manages Game Flow
+    - Interfaces with Board and Piece
+    - Implements play(String move)
+    - Tracks current player
+    - Resets the game with start()
+
+Board.java (Represent 8x8 Grid of Squares)
+    - Maintains the current position of all pieces
+    - Proivdes utility functions
+        - getPieceAt(Position pos): Retrieve a piece at a given position
+        - movePiece(Position from, Position to): Moves a piece if the action is valid
+        - isCheck(Player player): Determines if the player is in check
+        - isCheckmate(Player player): Determines if it's checkmate
+    - Initializes the board with starting positions of pieces
+
+Piece.java (Abstract parent class for all chess pieces)
+    - Contains 
+        - Player owner: Determines if it belongs to white or black
+        - Position position: Current position on the board
+    - Defines
+        - Abstract boolean isValidMove(Position from, Position to, Board board): Determines if the move is legal based on rules
+
+Concrete Piece Classes:
+Pawn.java (Extends Piece)
+Rook.java (Extends Piece)
+Knight.java (Extends Piece)
+Bishop.java (Extends Piece)
+Queen.java (Extends Piece)
+King.java (Extends Piece)
+    - Handles Castling logic
+
+Position.java (Encapsulates file and rank)
+    Provides utilities:
+        - equals(): Check if two positions are the same
+        - isWithinBouns(): Ensures the position is within the board
+
+Move.java (Represents a single move in chess)
+    Contains:
+        - Position from
+        - Position to
+        - Piece movingPiece
+        - Piece capturedPiece (null if no capture)
+        - boolean isCastle
+        - boolean isEnPassant
+        - boolean isPromotion
+    Useful for undo functionality and history tracking
+
+Player.java
+    - Enum stored in Chess.java
+
+GameState.java
+    - Enum for game status
+        - IN_PROGRESS
+        - CHECK_WHITE
+        - CHECK_BLACK
+        - CHECKMATE_WHITE_WINS
+        - CHECKMATE_BLACK_WINS
+        - STALEMATE (Unused)
+        - DRAW
+
+MoveValidator.java (Validates all move rules)
+    - Basic Piece movement
+    - Special Moves
+    - Preventing Illegal Moves that leave the king in check
+
+
+**Flow Structure**
+Game Starts: Chess.start()
+Board is initialized: Board.initialize()
+Players take turns:
+    - Chess.play(move): Processes the input
+    - MoveValidator: Checks if the move is valid
+    Board.movePiece(): Updates the board
+    GameState is checked
+Looped until a checkmate or resignation occurs
