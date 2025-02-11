@@ -1,3 +1,6 @@
+// Kaileb Cole (KJC265)
+// Maxime Deperrois (MDD182)
+
 package chess;
 
 public class Chess {
@@ -37,7 +40,7 @@ public class Chess {
         }
 
         // TODO, Implement Move Processing, Temporary solution
-        result.piecesOnBoard = board.getPiecesOnBoard();
+        result.piecesOnBoard = board.getReturnPieces();
         result.message = null;
 
 		return result;
@@ -50,7 +53,7 @@ public class Chess {
         // Reset Board and Player Turn
         board = new Board();
         currentTurn = Player.white;
-        PlayChess.printBoard(board.getPiecesOnBoard());
+        PlayChess.printBoard(board.getReturnPieces());
 	}
 }
 
