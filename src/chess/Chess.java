@@ -44,6 +44,7 @@ public class Chess {
 		/* FILL IN THIS METHOD */
 		pieces = initializePieces();
 		PlayChess.printBoard(pieces);
+		
 	}
 
 	private static ArrayList<ReturnPiece> initializePieces() {

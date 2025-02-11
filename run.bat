@@ -1,4 +1,7 @@
 @echo off
+REM Clean the bin directory
+rmdir /s /q bin
+
 REM Compile the Java files
 javac -d bin src/chess/*.java
 

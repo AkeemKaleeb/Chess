@@ -72,7 +72,7 @@ Move.java (Represents a single move in chess)
 Player.java
     - Enum stored in Chess.java
 
-GameState.java
+GameState.java (Hanlded by ReturnPlay)
     - Enum for game status
         - IN_PROGRESS
         - CHECK_WHITE
