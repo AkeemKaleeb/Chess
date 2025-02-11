@@ -4,6 +4,11 @@ public class Position {
     private int file;
     private int rank;
 
+    public Position(int file, int rank) {
+        this.file = file;
+        this.rank = rank;
+    }
+
     // Returns True if the position is the same as a provided position
     public boolean equals(Position other) {
         return this.file == other.file && this.rank == other.rank;

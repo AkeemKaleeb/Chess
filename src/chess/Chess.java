@@ -25,12 +25,27 @@ public class Chess {
 
 		/* FILL IN THIS METHOD */
 
-		String cleanMove = sanitizeMove(move);
-		if (cleanMove == null) {
-			return null;
+		Position from = new Position(move.charAt(0), Character.getNumericValue(move.charAt(1)));
+		Position to = new Position(move.charAt(3), Character.getNumericValue(move.charAt(4)));
+		Piece piece = Board.getPieceAt(from);
+		if (piece != null) {
+			// Use the piece variable
 		}
-		System.out.println("Playing move: " + cleanMove);
-		
+		if (piece instanceof Pawn) {
+			return null;
+		} else if (piece instanceof Rook) {
+			// Handle rook move
+		} else if (piece instanceof Knight) {
+			// Handle knight move
+		} else if (piece instanceof Bishop) {
+			// Handle bishop move
+		} else if (piece instanceof Queen) {
+			// Handle queen move
+		} else if (piece instanceof King) {
+			// Handle king move
+		} else {
+			// Handle unknown piece type
+		}
 		/* FOLLOWING LINE IS A PLACEHOLDER TO MAKE COMPILER HAPPY */
 		/* WHEN YOU FILL IN THIS METHOD, YOU NEED TO RETURN A ReturnPlay OBJECT */
 		return null;

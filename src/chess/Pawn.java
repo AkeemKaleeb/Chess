@@ -9,19 +9,36 @@ public class Pawn extends Piece {
 
     @Override
     public boolean isValidMove(Position from, Position to, Board board) {
-        if (isFirstMove) {
-            if (from.getFile() == to.getFile() && from.getRank() == to.getRank() + (owner.equals(Chess.Player.black) ? -2 : 2)) {
-                isFirstMove = false;
-                return true;
-            }
-            if (from.getFile() == to.getFile() && from.getRank() == to.getRank() + (owner.equals(Chess.Player.black) ? -1 : 1)) {
-                isFirstMove = false;
-                return true;
+        // Check that there are no pieces in the way
+        if (from.getFile() == to.getFile()) {
+            if (board.getPieceAt(to) != null) {
+                return false;
             }
         }
-        else if (from.getFile() == to.getFile() && from.getRank() == to.getRank() + (owner.equals(Chess.Player.black) ? -1 : 1)) {
+
+        // Check for the first move of the pawn
+        // Forward 2
+        if (from.getFile() == to.getFile() && from.getRank() == to.getRank() + (owner.equals(Chess.Player.black) ? -2 : 2)
+            && board.getPieceAt(to) == null
+            && board.getPieceAt(new Position(from.getFile(), from.getRank() + (owner.equals(Chess.Player.black) ? -1 : 1))) == null
+            && isFirstMove) {
+            isFirstMove = false;
             return true;
         }
+        // Forward 1
+        if (from.getFile() == to.getFile() && from.getRank() == to.getRank() + (owner.equals(Chess.Player.black) ? -1 : 1)
+                && board.getPieceAt(to) == null) {
+            isFirstMove = false;
+            return true;
+        }
+        // Capture
+        if (Math.abs(from.getFile() - to.getFile()) == 1 && from.getRank() == to.getRank() + (owner.equals(Chess.Player.black) ? -1 : 1)
+                && board.getPieceAt(to) != null) {
+            isFirstMove = false;
+            return true;
+        }
+
+        // TODO: En Passant 
 
         return false;
     }
