@@ -2,8 +2,8 @@ package chess;
 
 public class Rook extends Piece {
     
-    public Rook(Chess.Player owner, Position position, ReturnPiece.PieceType pieceType) {
-        super(owner, position, pieceType);
+    public Rook(Chess.Player owner, Position position, Board board) {
+        super(owner, position, owner == Chess.Player.white ? ReturnPiece.PieceType.WR : ReturnPiece.PieceType.BR, board);
     }
 
     @Override
@@ -14,7 +14,7 @@ public class Rook extends Piece {
             if (from.getFile() == to.getFile()) {
                 int direction = to.getRank() > from.getRank() ? 1 : -1;
                 for (int i = 1; i < Math.abs(from.getRank() - to.getRank()); i++) {
-                    if (Board.getPieceAt(new Position(from.getFile(), from.getRank() + i * direction)) != null) {
+                    if (board.getPieceAt(new Position(from.getFile(), from.getRank() + i * direction)) != null) {
                         return false;
                     }
                 }
@@ -22,7 +22,7 @@ public class Rook extends Piece {
             else {
                 int direction = to.getFile() > from.getFile() ? 1 : -1;
                 for (int i = 1; i < Math.abs(from.getFile() - to.getFile()); i++) {
-                    if (Board.getPieceAt(new Position(from.getFile() + i * direction, from.getRank())) != null) {
+                    if (board.getPieceAt(new Position(from.getFile() + i * direction, from.getRank())) != null) {
                         return false;
                     }
                 }

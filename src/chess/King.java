@@ -2,8 +2,8 @@ package chess;
 
 public class King extends Piece  {
     
-    public King(Chess.Player owner, Position position, ReturnPiece.PieceType pieceType) {
-        super(owner, position, pieceType);
+    public King(Chess.Player owner, Position position, Board board) {
+        super(owner, position, owner == Chess.Player.white ? ReturnPiece.PieceType.WK : ReturnPiece.PieceType.BK, board);
     }
 
     @Override

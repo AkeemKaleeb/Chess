@@ -9,10 +9,10 @@ import java.util.regex.Pattern;
 public class Chess {
 
         enum Player { white, black }
-    
-	private static ArrayList<ReturnPiece> pieces;
 
-	/**
+		private static Board board;
+	
+		/**
 	 * Plays the next move for whichever player has the turn.
 	 * 
 	 * @param move String for next move, e.g. "a2 a3"
@@ -26,27 +26,47 @@ public class Chess {
 		/* FILL IN THIS METHOD */
 
 		move = sanitizeMove(move);
-		
+
 		Position from = new Position(move.charAt(0), Character.getNumericValue(move.charAt(1)));
 		Position to = new Position(move.charAt(3), Character.getNumericValue(move.charAt(4)));
-		Piece piece = Board.getPieceAt(from);
+		Piece piece = board.getPieceAt(from);
 		if (piece != null) {
-			// Use the piece variable
-		}
-		if (piece instanceof Pawn) {
-			return null;
-		} else if (piece instanceof Rook) {
-			// Handle rook move
-		} else if (piece instanceof Knight) {
-			// Handle knight move
-		} else if (piece instanceof Bishop) {
-			// Handle bishop move
-		} else if (piece instanceof Queen) {
-			// Handle queen move
-		} else if (piece instanceof King) {
-			// Handle king move
-		} else {
-			// Handle unknown piece type
+			switch (piece.getClass().getSimpleName()) {
+				case "Pawn":
+					if (piece.isValidMove(from, to)) {
+						// Handle pawn move
+						return new ReturnPlay();
+					}
+					break;
+				case "Rook":
+					if (piece.isValidMove(from, to)) {
+						// Handle rook move
+					}
+					break;
+				case "Knight":
+					if (piece.isValidMove(from, to)) {
+						// Handle knight move
+					}
+					break;
+				case "Bishop":
+					if (piece.isValidMove(from, to)) {
+						// Handle bishop move
+					}
+					break;
+				case "Queen":
+					if (piece.isValidMove(from, to)) {
+						// Handle queen move
+					}
+					break;
+				case "King":
+					if (piece.isValidMove(from, to)) {
+						// Handle king move
+					}
+					break;
+				default:
+					// Handle unknown piece type
+					break;
+			}
 		}
 		/* FOLLOWING LINE IS A PLACEHOLDER TO MAKE COMPILER HAPPY */
 		/* WHEN YOU FILL IN THIS METHOD, YOU NEED TO RETURN A ReturnPlay OBJECT */
@@ -59,50 +79,10 @@ public class Chess {
 	 */
 	public static void start() {
 		/* FILL IN THIS METHOD */
-		pieces = initializePieces();
-		PlayChess.printBoard(pieces);
+		board = new Board();
+		PlayChess.printBoard(board.getReturnPieces());
 		
 	}
-
-	private static ArrayList<ReturnPiece> initializePieces() {
-        pieces = new ArrayList<>();
-
-        // Set up white pieces
-        pieces.add(createPiece(ReturnPiece.PieceType.WR, ReturnPiece.PieceFile.a, 1));
-        pieces.add(createPiece(ReturnPiece.PieceType.WN, ReturnPiece.PieceFile.b, 1));
-        pieces.add(createPiece(ReturnPiece.PieceType.WB, ReturnPiece.PieceFile.c, 1));
-        pieces.add(createPiece(ReturnPiece.PieceType.WQ, ReturnPiece.PieceFile.d, 1));
-        pieces.add(createPiece(ReturnPiece.PieceType.WK, ReturnPiece.PieceFile.e, 1));
-        pieces.add(createPiece(ReturnPiece.PieceType.WB, ReturnPiece.PieceFile.f, 1));
-        pieces.add(createPiece(ReturnPiece.PieceType.WN, ReturnPiece.PieceFile.g, 1));
-        pieces.add(createPiece(ReturnPiece.PieceType.WR, ReturnPiece.PieceFile.h, 1));
-        for (ReturnPiece.PieceFile file : ReturnPiece.PieceFile.values()) {
-            pieces.add(createPiece(ReturnPiece.PieceType.WP, file, 2));
-        }
-
-        // Set up black pieces
-        pieces.add(createPiece(ReturnPiece.PieceType.BR, ReturnPiece.PieceFile.a, 8));
-        pieces.add(createPiece(ReturnPiece.PieceType.BN, ReturnPiece.PieceFile.b, 8));
-        pieces.add(createPiece(ReturnPiece.PieceType.BB, ReturnPiece.PieceFile.c, 8));
-        pieces.add(createPiece(ReturnPiece.PieceType.BQ, ReturnPiece.PieceFile.d, 8));
-        pieces.add(createPiece(ReturnPiece.PieceType.BK, ReturnPiece.PieceFile.e, 8));
-        pieces.add(createPiece(ReturnPiece.PieceType.BB, ReturnPiece.PieceFile.f, 8));
-        pieces.add(createPiece(ReturnPiece.PieceType.BN, ReturnPiece.PieceFile.g, 8));
-        pieces.add(createPiece(ReturnPiece.PieceType.BR, ReturnPiece.PieceFile.h, 8));
-        for (ReturnPiece.PieceFile file : ReturnPiece.PieceFile.values()) {
-            pieces.add(createPiece(ReturnPiece.PieceType.BP, file, 7));
-        }
-
-        return pieces;
-    }
-
-    private static ReturnPiece createPiece(ReturnPiece.PieceType type, ReturnPiece.PieceFile file, int rank) {
-        ReturnPiece piece = new ReturnPiece();
-        piece.pieceType = type;
-        piece.pieceFile = file;
-        piece.pieceRank = rank;
-        return piece;
-    }
 
 	private static String sanitizeMove(String move) {
 		move = move.trim().toLowerCase();
