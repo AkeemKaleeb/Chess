@@ -2,6 +2,7 @@ package chess;
 
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 public class PlayChess {
 
@@ -9,7 +10,6 @@ public class PlayChess {
 		// TODO Auto-generated method stub
 		Scanner sc = new Scanner(System.in);
 		Chess.start();
-		
 		String line = sc.nextLine();
 		while (!line.equals("quit")) {
 			if (line.equals("reset")) {

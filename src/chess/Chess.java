@@ -44,7 +44,7 @@ public class Chess {
         result.piecesOnBoard = board.getReturnPieces();
         result.message = null;
 
-        clearConsole();
+        //clearConsole();
         return result;
     }
     
@@ -54,7 +54,7 @@ public class Chess {
         // Reset Board and Player Turn
         board = new Board();
         currentTurn = Player.white;
-        clearConsole();
+        //clearConsole();
         PlayChess.printBoard(board.getReturnPieces());
     }
 
@@ -66,7 +66,7 @@ public class Chess {
         return currentTurn;
     }
 
-    // TODO: Remove this method, for Debugging purposes only
+    // TODO: Remove the following methods, for Debugging purposes only
     public static void clearConsole() {
         try {
             if (System.getProperty("os.name").contains("Windows")) {
