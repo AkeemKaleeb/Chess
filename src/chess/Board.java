@@ -58,7 +58,6 @@ public class Board {
         }
     }
 
-    // Return the pieces on the board
     public ArrayList<ReturnPiece> getReturnPieces() {
         ArrayList<ReturnPiece> returnPieces = new ArrayList<>();
         for (p_Piece piece : pieces) {
@@ -76,20 +75,26 @@ public class Board {
         // Get From and To locations
         ReturnPiece.PieceFile fromFile = ReturnPiece.PieceFile.valueOf(from.substring(0, 1));
         int fromRank = Integer.parseInt(from.substring(1));
-
+    
         ReturnPiece.PieceFile toFile = ReturnPiece.PieceFile.valueOf(to.substring(0, 1));
         int toRank = Integer.parseInt(to.substring(1));
-
-        // Find piece on the board, if it exists, move it
-        for (p_Piece piece : pieces) {
-            if (piece.getFile() == fromFile && piece.getrank() == fromRank) {
-                piece.setPosition(toFile, toRank);
-                return true;
-            }
+    
+        // Find piece on the board
+        p_Piece piece = getPieceAt(fromFile, fromRank);
+        if (piece == null) {
+            return false;
         }
-        return false;
+    
+        // Check if the move is valid
+        if (!piece.isValidMove(toFile, toRank, this)) {
+            return false;
+        }
+    
+        // Move the piece
+        piece.setPosition(toFile, toRank);
+        return true;
     }
-
+    
     public p_Piece getPieceAt(ReturnPiece.PieceFile file, int rank) {
         for (p_Piece piece : pieces) {
             if (piece.getFile() == file && piece.getrank() == rank) {
