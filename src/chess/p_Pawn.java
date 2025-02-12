@@ -3,25 +3,36 @@ package chess;
 public class p_Pawn extends p_Piece {
     private boolean hasMoved = false;
 
-    public p_Pawn(ReturnPiece.PieceFile file, int rank, Chess.Player player) {
-        super(player.equals(Chess.Player.white) ? ReturnPiece.PieceType.WP : ReturnPiece.PieceType.BP, file, rank, player);
+    public p_Pawn(Position position, Chess.Player player) {
+        super(player.equals(Chess.Player.white) ? ReturnPiece.PieceType.WP : ReturnPiece.PieceType.BP, position, player);
     }
 
     @Override
-    public boolean isValidMove(ReturnPiece.PieceFile toFile, int toRank, Board board) {
-        // Check if the move is one square forward
-        if (toFile != file) {
-            return false;
+    public boolean isValidMove(Position toPosition, Board board) {
+        int fileDifference = Math.abs(toPosition.getFile() - this.position.getFile());
+        int rankDifference = player.equals(Chess.Player.white) ? toPosition.getRank() - position.getRank() : position.getRank() - toPosition.getRank();
+
+        // Check for normal move
+        if (fileDifference == 0) {
+            if (rankDifference == 1) {
+                hasMoved = true;
+                return board.getPieceAt(toPosition) == null;
+            } else if (rankDifference == 2 && !hasMoved) {
+                int intermediateRank = player.equals(Chess.Player.white) ? position.getRank() + 1 : position.getRank() - 1;
+                Position intermediatePosition = new Position(position.getFile(), intermediateRank);
+                hasMoved = true;
+                return board.getPieceAt(toPosition) == null && board.getPieceAt(intermediatePosition) == null;
+            }
         }
 
-        int rankDifference = player.equals(Chess.Player.white) ? toRank - rank : rank - toRank;
-        if (rankDifference == 1) {
+        // Check for capturing move
+        if (fileDifference == 1 && rankDifference == 1) {
             hasMoved = true;
-            return board.getPieceAt(toFile, toRank) == null;
-        } else if (rankDifference == 2 && !hasMoved) {
-            hasMoved = true;
-            return board.getPieceAt(toFile, toRank) == null && board.getPieceAt(toFile, player.equals(Chess.Player.white) ? 4 : 5) == null;
+            return board.getPieceAt(toPosition) != null && board.getPieceAt(toPosition).getPlayer() != this.player;
         }
+
+        // Check for en passant (optional, if your game supports it)
+        // Add en passant logic here if needed
 
         return false;
     }

@@ -1,7 +1,6 @@
-// Kaileb Cole (KJC265)
-// Maxime Deperrois (MDD182)
-
 package chess;
+
+import java.util.ArrayList;
 
 public class Chess {
 
@@ -9,18 +8,17 @@ public class Chess {
     
     private static Player currentTurn;
     private static Board board;
-	/**
-	 * Plays the next move for whichever player has the turn.
-	 * 
-	 * @param move String for next move, e.g. "a2 a3"
-	 * 
-	 * @return A ReturnPlay instance that contains the result of the move.
-	 *         See the section "The Chess class" in the assignment description for details of
-	 *         the contents of the returned ReturnPlay instance.
-	 */
-	public static ReturnPlay play(String move) {
-		/* FILL IN THIS METHOD */
-		ReturnPlay result = new ReturnPlay();
+    /**
+     * Plays the next move for whichever player has the turn.
+     * 
+     * @param move String for next move, e.g. "a2 a3"
+     * 
+     * @return A ReturnPlay instance that contains the result of the move.
+     *         See the section "The Chess class" in the assignment description for details of
+     *         the contents of the returned ReturnPlay instance.
+     */
+    public static ReturnPlay play(String move) {
+        ReturnPlay result = new ReturnPlay();
 
         // Read the move input
         String[] moveParts = move.split(" ");
@@ -29,8 +27,8 @@ public class Chess {
             return result;
         }
 
-        String from = moveParts[0];
-        String to = moveParts[1];
+        Position from = Position.fromString(moveParts[0]);
+        Position to = Position.fromString(moveParts[1]);
 
         // Make the move
         boolean moveSuccess = board.movePiece(from, to);
@@ -39,21 +37,46 @@ public class Chess {
             return result;
         }
 
-        // TODO, Implement Move Processing, Temporary solution
+        // Update the turn
+        currentTurn = (currentTurn == Chess.Player.white) ? Chess.Player.black : Chess.Player.white;
+
+        // Prepare the result
         result.piecesOnBoard = board.getReturnPieces();
         result.message = null;
 
-		return result;
-	}
-	
-	
-	//This method should reset the game, and start from scratch.
-	public static void start() {
-		/* FILL IN THIS METHOD */
+        clearConsole();
+        return result;
+    }
+    
+    
+    //This method should reset the game, and start from scratch.
+    public static void start() {
         // Reset Board and Player Turn
         board = new Board();
         currentTurn = Player.white;
+        clearConsole();
         PlayChess.printBoard(board.getReturnPieces());
-	}
-}
+    }
 
+    public ArrayList<ReturnPiece> getReturnPieces() {
+        return board.getReturnPieces();
+    }
+
+    public Chess.Player getCurrentTurn() {
+        return currentTurn;
+    }
+
+    // TODO: Remove this method, for Debugging purposes only
+    public static void clearConsole() {
+        try {
+            if (System.getProperty("os.name").contains("Windows")) {
+                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+            } else {
+                System.out.print("\033[H\033[2J");
+                System.out.flush();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
