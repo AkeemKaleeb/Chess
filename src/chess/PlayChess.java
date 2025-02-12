@@ -6,26 +6,29 @@ import java.util.Scanner;
 public class PlayChess {
 
 	public static void main(String[] args) {
+		// TODO Auto-generated method stub
 		Scanner sc = new Scanner(System.in);
-		Chess.start();                                  // Create the initial board
+		Chess.start();
 		
 		String line = sc.nextLine();
-		while (!line.equals("quit")) {         // Loop until user types "quit"
-			if (line.equals("reset")) {        // Reset the board
+		while (!line.equals("quit")) {
+			if (line.equals("reset")) {
 				Chess.start();
 				System.out.println();
 				line = sc.nextLine();
 				continue;
 			}
-
-			ReturnPlay res = Chess.play(line);          // Play the move
+			// move 
+			ReturnPlay res = Chess.play(line);
 			
-			if (res.message != null) {                  // Print result message
+			// print result message
+			if (res.message != null) {
 				System.out.println("\n"+res.message);
 			}
 			System.out.println();
 			
-			printBoard(res.piecesOnBoard);              // Print result board
+			// print result board
+			printBoard(res.piecesOnBoard);
 			System.out.println();
 			
 			// next line

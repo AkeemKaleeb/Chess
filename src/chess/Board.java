@@ -3,77 +3,104 @@ package chess;
 import java.util.ArrayList;
 
 public class Board {
-
-    private ArrayList<Piece> pieces;
-
+    private ArrayList<p_Piece> pieces;
+    
     public Board() {
         pieces = new ArrayList<>();
-        initializePieces();
+        resetBoard();
     }
-
-    private void initializePieces() {
-        // Initialize pieces and add them to the pieces list
-        pieces.add(new Pawn(Chess.Player.white, new Position('a', 2), this));
-        pieces.add(new Pawn(Chess.Player.white, new Position('b', 2), this));
-        pieces.add(new Pawn(Chess.Player.white, new Position('c', 2), this));
-        pieces.add(new Pawn(Chess.Player.white, new Position('d', 2), this));
-        pieces.add(new Pawn(Chess.Player.white, new Position('e', 2), this));
-        pieces.add(new Pawn(Chess.Player.white, new Position('f', 2), this));
-        pieces.add(new Pawn(Chess.Player.white, new Position('g', 2), this));
-        pieces.add(new Pawn(Chess.Player.white, new Position('h', 2), this));
-        pieces.add(new Rook(Chess.Player.white, new Position('a', 1), this));
-        pieces.add(new Rook(Chess.Player.white, new Position('h', 1), this));
-        pieces.add(new Knight(Chess.Player.white, new Position('b', 1), this));
-        pieces.add(new Knight(Chess.Player.white, new Position('g', 1), this));
-        pieces.add(new Bishop(Chess.Player.white, new Position('c', 1), this));
-        pieces.add(new Bishop(Chess.Player.white, new Position('f', 1), this));
-        pieces.add(new Queen(Chess.Player.white, new Position('d', 1), this));
-        pieces.add(new King(Chess.Player.white, new Position('e', 1), this));
-
-        pieces.add(new Pawn(Chess.Player.black, new Position('a', 7), this));
-        pieces.add(new Pawn(Chess.Player.black, new Position('b', 7), this));
-        pieces.add(new Pawn(Chess.Player.black, new Position('c', 7), this));
-        pieces.add(new Pawn(Chess.Player.black, new Position('d', 7), this));
-        pieces.add(new Pawn(Chess.Player.black, new Position('e', 7), this));
-        pieces.add(new Pawn(Chess.Player.black, new Position('f', 7), this));
-        pieces.add(new Pawn(Chess.Player.black, new Position('g', 7), this));
-        pieces.add(new Pawn(Chess.Player.black, new Position('h', 7), this));
-        pieces.add(new Rook(Chess.Player.black, new Position('a', 8), this));
-        pieces.add(new Rook(Chess.Player.black, new Position('h', 8), this));
-        pieces.add(new Knight(Chess.Player.black, new Position('b', 8), this));
-        pieces.add(new Knight(Chess.Player.black, new Position('g', 8), this));
-        pieces.add(new Bishop(Chess.Player.black, new Position('c', 8), this));
-        pieces.add(new Bishop(Chess.Player.black, new Position('f', 8), this));
-        pieces.add(new Queen(Chess.Player.black, new Position('d', 8), this));
-        pieces.add(new King(Chess.Player.black, new Position('e', 8), this));
+    
+    public void resetBoard() {
+        pieces.clear();
+        
+        // Initialize Pawns
+        for (ReturnPiece.PieceFile file : ReturnPiece.PieceFile.values()) {
+            pieces.add(new p_Pawn(file, 2, Chess.Player.white));
+            pieces.add(new p_Pawn(file, 7, Chess.Player.black));
+        }
+        
+        // Initialize Other Pieces
+        setupBackRank(1, Chess.Player.white);
+        setupBackRank(8, Chess.Player.black);
+    }
+        
+    // Helper method to setup the back rank
+    private void setupBackRank(int rank, Chess.Player player) {
+        ReturnPiece.PieceFile[] files = ReturnPiece.PieceFile.values();
+        
+        p_Piece[] order;
+        if (player == Chess.Player.white) {
+            order = new p_Piece[]{
+                new p_Rook(files[0], rank, player),
+                new p_Knight(files[1], rank, player),
+                new p_Bishop(files[2], rank, player),
+                new p_Queen(files[3], rank, player),
+                new p_King(files[4], rank, player),
+                new p_Bishop(files[5], rank, player),
+                new p_Knight(files[6], rank, player),
+                new p_Rook(files[7], rank, player)
+            };
+        } else {
+            order = new p_Piece[]{
+                new p_Rook(files[0], rank, player),
+                new p_Knight(files[1], rank, player),
+                new p_Bishop(files[2], rank, player),
+                new p_Queen(files[3], rank, player),
+                new p_King(files[4], rank, player),
+                new p_Bishop(files[5], rank, player),
+                new p_Knight(files[6], rank, player),
+                new p_Rook(files[7], rank, player)
+            };
+        }
+        
+        for (p_Piece piece : order) {
+            pieces.add(piece);
+        }
     }
 
     public ArrayList<ReturnPiece> getReturnPieces() {
         ArrayList<ReturnPiece> returnPieces = new ArrayList<>();
-        for (Piece piece : pieces) {
+        for (p_Piece piece : pieces) {
             ReturnPiece returnPiece = new ReturnPiece();
-            returnPiece.pieceType = piece.getPieceType();
-            returnPiece.pieceFile = ReturnPiece.PieceFile.values()[piece.getPosition().getFile() - 'a'];
-            returnPiece.pieceRank = piece.getPosition().getRank();
+            returnPiece.pieceType = piece.getType();
+            returnPiece.pieceFile = piece.getFile();
+            returnPiece.pieceRank = piece.getrank();
             returnPieces.add(returnPiece);
-            System.out.println(returnPiece.toString());
         }
         return returnPieces;
     }
-
-    public Piece getPieceAt(Position position) {
-        for (Piece piece : pieces) {
-            if (piece.getPosition().getFile() == position.getFile() && piece.getPosition().getRank() == position.getRank()) {
+    
+    // Move a piece from one location to another
+    public boolean movePiece(String from, String to) {
+        // Get From and To locations
+        ReturnPiece.PieceFile fromFile = ReturnPiece.PieceFile.valueOf(from.substring(0, 1));
+        int fromRank = Integer.parseInt(from.substring(1));
+    
+        ReturnPiece.PieceFile toFile = ReturnPiece.PieceFile.valueOf(to.substring(0, 1));
+        int toRank = Integer.parseInt(to.substring(1));
+    
+        // Find piece on the board
+        p_Piece piece = getPieceAt(fromFile, fromRank);
+        if (piece == null) {
+            return false;
+        }
+    
+        // Check if the move is valid
+        if (!piece.isValidMove(toFile, toRank, this)) {
+            return false;
+        }
+    
+        // Move the piece
+        piece.setPosition(toFile, toRank);
+        return true;
+    }
+    
+    public p_Piece getPieceAt(ReturnPiece.PieceFile file, int rank) {
+        for (p_Piece piece : pieces) {
+            if (piece.getFile() == file && piece.getrank() == rank) {
                 return piece;
             }
         }
         return null;
-    }
-
-    public void movePiece(Position from, Position to) {
-        Piece piece = getPieceAt(from);
-        if (piece != null) {
-            piece.setPosition(to);
-        }
     }
 }
