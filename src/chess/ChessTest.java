@@ -1,6 +1,27 @@
 package chess;
 
+import java.util.concurrent.TimeUnit;
+
 public class ChessTest {
+
+    public static void test() {
+        try {
+            testPawnMovement();
+            TimeUnit.SECONDS.sleep(3);
+            testRookMovement();
+            TimeUnit.SECONDS.sleep(3);
+            testKnightMovement();
+            TimeUnit.SECONDS.sleep(3);
+            testBishopMovement();
+            TimeUnit.SECONDS.sleep(3);
+            testQueenMovement();
+            TimeUnit.SECONDS.sleep(3);
+            testKingMovement();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void testPawnMovement() {
         Chess.start();
         System.out.println("Testing Pawn Movement:");

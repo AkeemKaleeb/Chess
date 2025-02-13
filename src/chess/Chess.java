@@ -2,6 +2,18 @@ package chess;
 
 import java.util.ArrayList;
 
+/*
+ * TODO: A list of everything left to implement for a presentable project
+ * Castling
+ * En passant
+ * Promotion
+ * Checkmate Detection
+ * Resignation
+ * Draw Detection
+ * 
+ */
+
+
 public class Chess {
 
     enum Player { white, black }

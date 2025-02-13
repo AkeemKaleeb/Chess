@@ -6,11 +6,12 @@ Partners: Kaileb Cole (KJC265), Maxime Deperrois (MDD182)
 **Development Plan**:
 **Board Instantiation**
 **Movement**:
-    - Input Sanitization
-    - Input Handling
-        - Illegal Moves
+    X Input Sanitization
+    X Input Handling
+        X Illegal Moves
     - Special Moves
         - Castling
+        - En Passant
         - Promotion
         - Resign
         - Draw
@@ -18,7 +19,7 @@ Partners: Kaileb Cole (KJC265), Maxime Deperrois (MDD182)
     - Checkmate
     - Resign
     - Draw
-    - Checks
+    X Checks
 
 **Architecture**:
 Chess.java (Game Manager)
