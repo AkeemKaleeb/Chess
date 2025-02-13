@@ -8,7 +8,6 @@ import java.util.ArrayList;
  * En passant
  * Promotion
  * Checkmate Detection
- * Resignation
  * Draw Detection
  * 
  */
@@ -34,22 +33,10 @@ public class Chess {
         ReturnPlay result = new ReturnPlay();
         result.piecesOnBoard = board.getReturnPieces();
 
-        // Clean and split the move input
-        move = cleanInput(move);
-        String[] moveParts = move.split(" ");
+        // Handle the input processing and moving of the piece
+        result = handleInput(move);
 
-        // Handle inputs outside of possibilities "from to" or "from to promotion"
-        if(moveParts.length != 2 && moveParts.length != 3) {
-            result.message = ReturnPlay.Message.ILLEGAL_MOVE;
-            return result;
-        }
-
-        // Parse the positions from the input
-        Position from = Position.fromString(moveParts[0]);
-        Position to = Position.fromString(moveParts[1]);
-
-        // Make the move, if an error occurs, prevent change of turn
-        result = board.movePiece(from, to);
+        // If an error occurred, return the error message
         if (result.message != null) {
             result.piecesOnBoard = board.getReturnPieces();
             return result;
@@ -64,9 +51,7 @@ public class Chess {
         return result;
     }
     
-    /**
-     * This method should reset the game, and start from scratch.
-     */
+    // This method should reset the game, and start from scratch.
     public static void start() {
         // Reset Board and Player Turn
         board = new Board();
@@ -74,30 +59,55 @@ public class Chess {
         PlayChess.printBoard(board.getReturnPieces());
     }
 
-    /**
-     * Get the current pieces on the board.
-     * 
-     * @return ArrayList of ReturnPiece representing the current board state.
-     */
+    // This method should handle the input processing and moving of the piece.
+    private static ReturnPlay handleInput(String move) {
+        ReturnPlay result = new ReturnPlay();
+        
+        // Clean and split the move input
+        move = cleanInput(move);
+
+        // Test for Resignation
+        if (move.equals("resign")) {
+            result.message = (currentTurn == Player.white) ? ReturnPlay.Message.RESIGN_BLACK_WINS : ReturnPlay.Message.RESIGN_WHITE_WINS;
+            return result;
+        }
+
+        
+        // Split the move into parts
+        String[] moveParts = move.split(" ");
+        
+        // Test for Draw "from to draw"
+        if (move.toLowerCase().contains("draw") && moveParts.length == 3) {
+            result.message = ReturnPlay.Message.DRAW;
+        }
+
+        // Handle inputs outside of possibilities "from to" or "from to promotion"
+        if(moveParts.length != 2 && moveParts.length != 3) {
+            result.message = ReturnPlay.Message.ILLEGAL_MOVE;
+            return result;
+        }
+
+        // Parse the positions from the input
+        Position from = Position.fromString(moveParts[0]);
+        Position to = Position.fromString(moveParts[1]);
+
+        // Make the move, if an error occurs, prevent change of turn
+        result = board.movePiece(from, to);
+
+        return result;
+    }
+
+    //  Get the current pieces on the board.
     public ArrayList<ReturnPiece> getReturnPieces() {
         return board.getReturnPieces();
     }
 
-    /**
-     * Get the current player's turn.
-     * 
-     * @return The current player's turn.
-     */
+    // Get the current player's turn.
     public Chess.Player getCurrentTurn() {
         return currentTurn;
     }
 
-    /**
-     * Clean the input string by trimming and converting to lower case.
-     * 
-     * @param input The input string to clean.
-     * @return The cleaned input string.
-     */
+    // Clean the input string by trimming and converting to lower case.
     private static String cleanInput(String input) {
         input = input.trim().toLowerCase();
 
@@ -105,21 +115,5 @@ public class Chess {
         input = input.replaceAll("\\s+", " ");
 
         return input;
-    }
-
-    /**
-     * Clear the console screen. This method is for debugging purposes only.
-     */
-    public static void clearConsole() {
-        try {
-            if (System.getProperty("os.name").contains("Windows")) {
-                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
-            } else {
-                System.out.print("\033[H\033[2J");
-                System.out.flush();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 }
