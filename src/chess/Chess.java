@@ -22,8 +22,11 @@ public class Chess {
         result.piecesOnBoard = board.getReturnPieces();
 
         // Read the move input
+        move = cleanInput(move);
         String[] moveParts = move.split(" ");
-        if(moveParts.length != 2) {
+
+        // Handle inputs outside of posibilities "from to" or "from to promotion"
+        if(moveParts.length != 2 && moveParts.length != 3) {
             result.message = ReturnPlay.Message.ILLEGAL_MOVE;
             return result;
         }
@@ -31,10 +34,10 @@ public class Chess {
         Position from = Position.fromString(moveParts[0]);
         Position to = Position.fromString(moveParts[1]);
 
-        // Make the move
-        boolean moveSuccess = board.movePiece(from, to);
-        if (!moveSuccess) {
-            result.message = ReturnPlay.Message.ILLEGAL_MOVE;
+        // Make the move, if an error, prevent change of turn
+        result = board.movePiece(from, to);
+        if (result.message != null) {
+            result.piecesOnBoard = board.getReturnPieces();
             return result;
         }
 
@@ -43,9 +46,7 @@ public class Chess {
 
         // Prepare the result
         result.piecesOnBoard = board.getReturnPieces();
-        result.message = null;
 
-        //clearConsole();
         return result;
     }
     
@@ -55,7 +56,6 @@ public class Chess {
         // Reset Board and Player Turn
         board = new Board();
         currentTurn = Player.white;
-        //clearConsole();
         PlayChess.printBoard(board.getReturnPieces());
     }
 
@@ -65,6 +65,15 @@ public class Chess {
 
     public Chess.Player getCurrentTurn() {
         return currentTurn;
+    }
+
+    private static String cleanInput(String input) {
+        input = input.trim().toLowerCase();
+
+        // Remove all spaces
+        input = input.replaceAll("\\s+", " ");
+
+        return input;
     }
 
     // TODO: Remove the following methods, for Debugging purposes only
@@ -80,4 +89,6 @@ public class Chess {
             e.printStackTrace();
         }
     }
+
+
 }

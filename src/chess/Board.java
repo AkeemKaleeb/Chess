@@ -59,26 +59,65 @@ public class Board {
     }
 
     // Move a piece from one location to another
-    public boolean movePiece(Position from, Position to) {
+    public ReturnPlay movePiece(Position from, Position to) {
+        ReturnPlay returnPlay = new ReturnPlay();
+
         // Find piece on the board
         p_Piece piece = getPieceAt(from);
-        if (piece == null) {
-            return false;
-        }
+        p_Piece target = getPieceAt(to);
 
-        // Check if the move is valid
-        if (!piece.isValidMove(to, this)) {
-            return false;
+        // If there is no piece or if the move is not an option, return an error
+        if (piece == null || !piece.isValidMove(to, this)) {
+            returnPlay.message = ReturnPlay.Message.ILLEGAL_MOVE;
+            return returnPlay;
         }
 
         // Move the piece
         board[to.getFile()][to.getRank()] = piece;
         board[from.getFile()][from.getRank()] = null;
         piece.setPosition(to);
-        return true;
+
+        // Test if this puts the current player in check
+        if(isCheck(piece.getPlayer())) {
+            // Undo the move
+            board[from.getFile()][from.getRank()] = piece;
+            board[to.getFile()][to.getRank()] = target;
+            piece.setPosition(from);
+            returnPlay.message = ReturnPlay.Message.ILLEGAL_MOVE;
+            return returnPlay;
+        }
+
+        return returnPlay;
     }
 
     public p_Piece getPieceAt(Position position) {
         return board[position.getFile()][position.getRank()];
+    }
+
+    // Test for checks
+    public boolean isCheck(Chess.Player player) {
+        // Find the king's position
+        Position kingPosition = null;
+        for (int file = 0; file < 8; file++) {
+            for (int rank = 0; rank < 8; rank++) {
+                p_Piece piece = board[file][rank];
+                if (piece != null && piece.getType() == (player.equals(Chess.Player.white) ? ReturnPiece.PieceType.WK : ReturnPiece.PieceType.BK)) {
+                    kingPosition = new Position(file, rank);
+                    break;
+                }
+            }
+        }
+
+        // Check if any opponent's piece can attack the king
+        for (int file = 0; file < 8; file++) {
+            for (int rank = 0; rank < 8; rank++) {
+                p_Piece piece = board[file][rank];
+                if (piece != null && piece.getPlayer() != player && piece.isValidMove(kingPosition, this)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }
