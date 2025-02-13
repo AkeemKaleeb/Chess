@@ -87,6 +87,11 @@ public class Board {
             return returnPlay;
         }
 
+        // Test if this puts the opponent in check
+        if(isCheck(piece.getPlayer().equals(Chess.Player.white) ? Chess.Player.black : Chess.Player.white)) {
+            returnPlay.message = ReturnPlay.Message.CHECK;
+        }
+
         return returnPlay;
     }
 
