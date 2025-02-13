@@ -7,39 +7,33 @@ public class p_Rook extends p_Piece {
 
     @Override
     public boolean isValidMove(Position toPosition, Board board) {
-        Position fromPosition = this.getPosition();
-        int fromFile = fromPosition.getFile();
-        int fromRank = fromPosition.getRank();
-        int toFile = toPosition.getFile();
-        int toRank = toPosition.getRank();
+        Position currentPosition = getPosition();
 
         // Check if the move is horizontal or vertical
-        if (fromFile != toFile && fromRank != toRank) {
+        if (currentPosition.getFile() != toPosition.getFile() && currentPosition.getRank() != toPosition.getRank()) {
             return false;
         }
 
         // Check if there are any pieces in the way
-        int fileDirection = Integer.compare(toFile, fromFile);
-        int rankDirection = Integer.compare(toRank, fromRank);
-        int currentFile = fromFile;
-        int currentRank = fromRank;
-        while (currentFile != toFile || currentRank != toRank) {
-            if (currentFile != toFile) {
-                currentFile += fileDirection;
+        int fileDirection = Integer.compare(toPosition.getFile(), currentPosition.getFile());
+        int rankDirection = Integer.compare(toPosition.getRank(), currentPosition.getRank());
+        Position nextPosition = new Position(
+            currentPosition.getFile() + fileDirection,
+            currentPosition.getRank() + rankDirection
+        );
+
+        while (!nextPosition.equals(toPosition)) {
+            if (board.getPieceAt(nextPosition) != null) {
+                return false;
             }
-            if (currentRank != toRank) {
-                currentRank += rankDirection;
-            }
-            if (currentFile != toFile || currentRank != toRank) {
-                Position currentPosition = new Position(currentFile, currentRank);
-                if (board.getPieceAt(currentPosition) != null) {
-                    return false;
-                }
-            }
+            nextPosition = new Position(
+                nextPosition.getFile() + fileDirection,
+                nextPosition.getRank() + rankDirection
+            );
         }
 
         // Check if the destination square is empty or has an opponent's piece
         p_Piece piece = board.getPieceAt(toPosition);
-        return piece == null || piece.getPlayer() != player;
+        return piece == null || piece.getPlayer() != getPlayer();
     }
 }

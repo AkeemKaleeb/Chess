@@ -7,9 +7,17 @@ public class p_Knight extends p_Piece {
 
     @Override
     public boolean isValidMove(Position toPosition, Board board) {
-        // Check if the move is L-shaped
-        int fileDifference = Math.abs(toPosition.getFile() - position.getFile());
-        int rankDifference = Math.abs(toPosition.getRank() - position.getRank());
-        return (fileDifference == 1 && rankDifference == 2) || (fileDifference == 2 && rankDifference == 1);
+        Position currentPosition = getPosition();
+
+        // Check if the move is an L-shape
+        int fileDiff = Math.abs(toPosition.getFile() - currentPosition.getFile());
+        int rankDiff = Math.abs(toPosition.getRank() - currentPosition.getRank());
+        if (!((fileDiff == 2 && rankDiff == 1) || (fileDiff == 1 && rankDiff == 2))) {
+            return false;
+        }
+
+        // Check if the destination square is empty or has an opponent's piece
+        p_Piece piece = board.getPieceAt(toPosition);
+        return piece == null || piece.getPlayer() != getPlayer();
     }
 }

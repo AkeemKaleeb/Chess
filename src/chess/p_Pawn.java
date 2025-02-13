@@ -1,38 +1,38 @@
 package chess;
 
 public class p_Pawn extends p_Piece {
-    private boolean hasMoved = false;
-
     public p_Pawn(Position position, Chess.Player player) {
         super(player.equals(Chess.Player.white) ? ReturnPiece.PieceType.WP : ReturnPiece.PieceType.BP, position, player);
     }
 
     @Override
     public boolean isValidMove(Position toPosition, Board board) {
-        int fileDifference = Math.abs(toPosition.getFile() - this.position.getFile());
-        int rankDifference = player.equals(Chess.Player.white) ? toPosition.getRank() - position.getRank() : position.getRank() - toPosition.getRank();
+        Position currentPosition = getPosition();
+        int fileDiff = toPosition.getFile() - currentPosition.getFile();
+        int rankDiff = toPosition.getRank() - currentPosition.getRank();
 
-        // Check for normal move
-        if (fileDifference == 0) {
-            if (rankDifference == 1) {
-                hasMoved = true;
-                return board.getPieceAt(toPosition) == null;
-            } else if (rankDifference == 2 && !hasMoved) {
-                int intermediateRank = player.equals(Chess.Player.white) ? position.getRank() + 1 : position.getRank() - 1;
-                Position intermediatePosition = new Position(position.getFile(), intermediateRank);
-                hasMoved = true;
-                return board.getPieceAt(toPosition) == null && board.getPieceAt(intermediatePosition) == null;
+        // Check if the move is forward
+        if (getPlayer() == Chess.Player.white) {
+            if (fileDiff == 0 && rankDiff == 1 && board.getPieceAt(toPosition) == null) {
+                return true;
+            }
+            if (fileDiff == 0 && rankDiff == 2 && currentPosition.getRank() == 1 && board.getPieceAt(toPosition) == null) {
+                return true;
+            }
+            if (Math.abs(fileDiff) == 1 && rankDiff == 1 && board.getPieceAt(toPosition) != null && board.getPieceAt(toPosition).getPlayer() != getPlayer()) {
+                return true;
+            }
+        } else {
+            if (fileDiff == 0 && rankDiff == -1 && board.getPieceAt(toPosition) == null) {
+                return true;
+            }
+            if (fileDiff == 0 && rankDiff == -2 && currentPosition.getRank() == 6 && board.getPieceAt(toPosition) == null) {
+                return true;
+            }
+            if (Math.abs(fileDiff) == 1 && rankDiff == -1 && board.getPieceAt(toPosition) != null && board.getPieceAt(toPosition).getPlayer() != getPlayer()) {
+                return true;
             }
         }
-
-        // Check for capturing move
-        if (fileDifference == 1 && rankDifference == 1) {
-            hasMoved = true;
-            return board.getPieceAt(toPosition) != null && board.getPieceAt(toPosition).getPlayer() != this.player;
-        }
-
-        // Check for en passant (optional, if your game supports it)
-        // Add en passant logic here if needed
 
         return false;
     }

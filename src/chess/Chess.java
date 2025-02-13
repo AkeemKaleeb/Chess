@@ -19,6 +19,7 @@ public class Chess {
      */
     public static ReturnPlay play(String move) {
         ReturnPlay result = new ReturnPlay();
+        result.piecesOnBoard = board.getReturnPieces();
 
         // Read the move input
         String[] moveParts = move.split(" ");

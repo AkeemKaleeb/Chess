@@ -17,15 +17,19 @@ public class p_Bishop extends p_Piece {
         // Check if there are any pieces in the way
         int fileDirection = toPosition.getFile() > currentPosition.getFile() ? 1 : -1;
         int rankDirection = toPosition.getRank() > currentPosition.getRank() ? 1 : -1;
-        Position nextPosition = currentPosition;
+        Position nextPosition = new Position(
+            currentPosition.getFile() + fileDirection,
+            currentPosition.getRank() + rankDirection
+        );
+
         while (!nextPosition.equals(toPosition)) {
+            if (board.getPieceAt(nextPosition) != null) {
+                return false;
+            }
             nextPosition = new Position(
                 nextPosition.getFile() + fileDirection,
                 nextPosition.getRank() + rankDirection
             );
-            if (board.getPieceAt(nextPosition) != null) {
-                return false;
-            }
         }
 
         // Check if the destination square is empty or has an opponent's piece
