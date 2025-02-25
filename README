@@ -12,13 +12,13 @@ Partners: Kaileb Cole (KJC265), Maxime Deperrois (MDD182)
     - Special Moves
         - Castling
         - En Passant
-        - Promotion
-        - Resign
-        - Draw
+        X Promotion
+        X Resign
+        X Draw
 **Win Conditions:**    
-    - Checkmate
-    - Resign
-    - Draw
+    X Checkmate
+    X Resign
+    X Draw
     X Checks
 
 **Architecture**:
