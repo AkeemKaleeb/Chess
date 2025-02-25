@@ -61,8 +61,13 @@ public class Board {
         return returnPieces;
     }
 
-    // Method to move a piece from one position to another
+    // Overloaded method to move a piece from one position to another without promotion
     public ReturnPlay movePiece(Position from, Position to) {
+        return movePiece(from, to, null);
+    }
+
+    // Method to move a piece from one position to another
+    public ReturnPlay movePiece(Position from, Position to, String promotionPiece) {
         ReturnPlay returnPlay = new ReturnPlay();
 
         // Find piece on the board
@@ -80,6 +85,27 @@ public class Board {
         board[from.getFile()][from.getRank()] = null;
         piece.setPosition(to);
 
+        // Handle promotion
+        if (piece instanceof p_Pawn && (to.getRank() == 0 || to.getRank() == 7)) {
+            switch (promotionPiece) {
+                case "Q":
+                    board[to.getFile()][to.getRank()] = new p_Queen(to, piece.getPlayer());
+                    break;
+                case "R":
+                    board[to.getFile()][to.getRank()] = new p_Rook(to, piece.getPlayer());
+                    break;
+                case "B":
+                    board[to.getFile()][to.getRank()] = new p_Bishop(to, piece.getPlayer());
+                    break;
+                case "N":
+                    board[to.getFile()][to.getRank()] = new p_Knight(to, piece.getPlayer());
+                    break;
+                default: 
+                    board[to.getFile()][to.getRank()] = new p_Queen(to, piece.getPlayer());
+                    break;
+            }
+        }
+
         // Test if this move puts the current player in check
         if (isCheck(piece.getPlayer())) {
             // Undo the move if it puts the player in check
@@ -93,6 +119,15 @@ public class Board {
         // Test if this move puts the opponent in check
         if (isCheck(piece.getPlayer().equals(Chess.Player.white) ? Chess.Player.black : Chess.Player.white)) {
             returnPlay.message = ReturnPlay.Message.CHECK;
+        }
+
+        // Test if this move puts the opponent in checkmate
+        if (isCheckmate(piece.getPlayer().equals(Chess.Player.white) ? Chess.Player.black : Chess.Player.white)) {
+            if (piece.getPlayer().equals(Chess.Player.white)) {
+                returnPlay.message = ReturnPlay.Message.CHECKMATE_WHITE_WINS;
+            } else {
+                returnPlay.message = ReturnPlay.Message.CHECKMATE_BLACK_WINS;
+            }
         }
 
         return returnPlay;
@@ -129,4 +164,52 @@ public class Board {
 
         return false;
     }
+
+    
+// Method to check if a player is in checkmate
+public boolean isCheckmate(Chess.Player player) {
+    // First, check if the player is in check
+    if (!isCheck(player)) {
+        return false;
+    }
+
+    // Iterate through all pieces of the player
+    for (int file = 0; file < 8; file++) {
+        for (int rank = 0; rank < 8; rank++) {
+            p_Piece piece = board[file][rank];
+            if (piece != null && piece.getPlayer() == player) {
+                // Check all possible moves for the piece
+                for (int newFile = 0; newFile < 8; newFile++) {
+                    for (int newRank = 0; newRank < 8; newRank++) {
+                        Position newPosition = new Position(newFile, newRank);
+                        if (piece.isValidMove(newPosition, this)) {
+                            // Make the move temporarily
+                            p_Piece target = board[newFile][newRank];
+                            Position oldPosition = piece.getPosition();
+                            board[newFile][newRank] = piece;
+                            board[file][rank] = null;
+                            piece.setPosition(newPosition);
+
+                            // Check if the player is still in check after the move
+                            boolean stillInCheck = isCheck(player);
+
+                            // Undo the move
+                            board[file][rank] = piece;
+                            board[newFile][newRank] = target;
+                            piece.setPosition(oldPosition);
+
+                            // If the player is not in check after the move, it's not checkmate
+                            if (!stillInCheck) {
+                                return false;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // If no valid moves can get the player out of check, it's checkmate
+    return true;
+}
 }

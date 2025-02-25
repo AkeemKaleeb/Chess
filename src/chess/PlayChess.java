@@ -17,7 +17,7 @@ public class PlayChess {
 				System.out.println();
 				line = sc.nextLine();
 				continue;
-			}
+			}			
 			// move 
 			ReturnPlay res = Chess.play(line);
 			

@@ -19,6 +19,7 @@ public class Chess {
     
     private static Player currentTurn;
     private static Board board;
+    private static boolean drawOffered;
 
     /**
      * Plays the next move for whichever player has the turn.
@@ -71,19 +72,24 @@ public class Chess {
             result.message = (currentTurn == Player.white) ? ReturnPlay.Message.RESIGN_BLACK_WINS : ReturnPlay.Message.RESIGN_WHITE_WINS;
             return result;
         }
-
         
         // Split the move into parts
         String[] moveParts = move.split(" ");
         
         // Test for Draw "from to draw"
-        if (move.toLowerCase().contains("draw") && moveParts.length == 3) {
-            result.message = ReturnPlay.Message.DRAW;
+        if (moveParts.length == 1 && moveParts[0].equals("draw")) {
+            if (drawOffered) {
+                result.message = ReturnPlay.Message.DRAW;
+                return result;
+            } else {
+                result.message = ReturnPlay.Message.ILLEGAL_MOVE;
+                return result;
+            }
         }
 
         // Handle inputs outside of possibilities "from to" or "from to promotion"
         if(moveParts.length != 2 && moveParts.length != 3) {
-            result.message = ReturnPlay.Message.ILLEGAL_MOVE;
+            result.message = ReturnPlay.Message.ILLEGAL_MOVE;   
             return result;
         }
 
@@ -91,8 +97,36 @@ public class Chess {
         Position from = Position.fromString(moveParts[0]);
         Position to = Position.fromString(moveParts[1]);
 
-        // Make the move, if an error occurs, prevent change of turn
-        result = board.movePiece(from, to);
+        // Find the piece at the 'from' position
+        p_Piece piece = board.getPieceAt(from);
+
+        // Handle promotion
+        if (moveParts.length == 3) {
+            String promotionPiece = moveParts[2].trim().toUpperCase();
+            if (promotionPiece.equals("Q") || promotionPiece.equals("R") || promotionPiece.equals("B") || promotionPiece.equals("N")) {
+                result = board.movePiece(from, to, promotionPiece);
+            } else {
+                result.message = ReturnPlay.Message.ILLEGAL_MOVE;
+                return result;
+            }
+        } else {
+            // Check if the move is a pawn reaching the last rank
+            if (piece instanceof p_Pawn && (to.getRank() == 0 || to.getRank() == 7)) {
+                result = board.movePiece(from, to, "Q"); // Default to Queen if no promotion piece is specified
+            } else {
+                // Make the move, if an error occurs, prevent change of turn
+                result = board.movePiece(from, to);
+            }
+        }
+
+        // If the move is valid, check for draw offer
+        if (result.message == null || result.message == ReturnPlay.Message.CHECK || result.message == ReturnPlay.Message.CHECKMATE_WHITE_WINS || result.message == ReturnPlay.Message.CHECKMATE_BLACK_WINS) {
+            if (moveParts.length == 3 && move.toLowerCase().contains("draw")) {
+                drawOffered = true;
+            } else {
+                drawOffered = false;
+            }
+        }
 
         return result;
     }
