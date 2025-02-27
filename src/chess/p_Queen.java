@@ -28,6 +28,11 @@ public class p_Queen extends p_Piece {
 
         // Check if there are any pieces in the way
         while (!nextPosition.equals(toPosition)) {
+            // Check Board Boundaries
+            if (!nextPosition.isValid()) {
+                return false;
+            }
+            
             if (board.getPieceAt(nextPosition) != null) {
                 return false; // Move is not valid if there is a piece in the way
             }

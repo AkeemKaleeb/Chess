@@ -26,6 +26,10 @@ public class Position {
         this.rank = rank;
     }
 
+    public boolean isValid() {
+        return file >= 0 && file < 8 && rank >= 0 && rank < 8;
+    }
+
     // Override the equals method to compare two Position objects
     @Override
     public boolean equals(Object obj) {

@@ -26,9 +26,16 @@ public class p_Bishop extends p_Piece {
 
         // Check each position along the diagonal path to ensure no pieces are in the way
         while (!nextPosition.equals(toPosition)) {
+            // Check Board Boundaries
+            if (!nextPosition.isValid()) {
+                return false;
+            }
+
+            // Check for pieces in the way
             if (board.getPieceAt(nextPosition) != null) {
                 return false; // A piece is blocking the path
             }
+            
             nextPosition = new Position(
                 nextPosition.getFile() + fileDirection,
                 nextPosition.getRank() + rankDirection

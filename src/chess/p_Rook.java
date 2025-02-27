@@ -26,6 +26,11 @@ public class p_Rook extends p_Piece {
 
         // Check each square along the path to the destination
         while (!nextPosition.equals(toPosition)) {
+            // Check Board Boundaries
+            if (!nextPosition.isValid()) {
+                return false;
+            }
+            
             if (board.getPieceAt(nextPosition) != null) {
                 return false; // There is a piece in the way
             }
