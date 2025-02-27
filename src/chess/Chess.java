@@ -76,7 +76,7 @@ public class Chess {
         // Split the move into parts
         String[] moveParts = move.split(" ");
         
-        // Test for Draw "from to draw"
+        // Test for Draw "draw"
         if (moveParts.length == 1 && moveParts[0].equals("draw")) {
             if (drawOffered) {
                 result.message = ReturnPlay.Message.DRAW;
@@ -87,7 +87,7 @@ public class Chess {
             }
         }
 
-        // Handle inputs outside of possibilities "from to" or "from to promotion"
+        // Handle inputs outside of possibilities "from to" or "from to promotion" or "from to draw"
         if(moveParts.length != 2 && moveParts.length != 3) {
             result.message = ReturnPlay.Message.ILLEGAL_MOVE;   
             return result;
@@ -100,8 +100,16 @@ public class Chess {
         // Find the piece at the 'from' position
         p_Piece piece = board.getPieceAt(from);
 
-        // Handle promotion
+        // Handle Three-Part Move
         if (moveParts.length == 3) {
+            // If the move is valid, check for draw offer
+            if (result.message != ReturnPlay.Message.ILLEGAL_MOVE && moveParts[2].equals("draw?")) {
+                result.message = ReturnPlay.Message.DRAW;
+                board.movePiece(from, to);
+                return result;
+            }
+
+            // Promotions
             String promotionPiece = moveParts[2].trim().toUpperCase();
             if (promotionPiece.equals("Q") || promotionPiece.equals("R") || promotionPiece.equals("B") || promotionPiece.equals("N")) {
                 result = board.movePiece(from, to, promotionPiece);
@@ -116,15 +124,6 @@ public class Chess {
             } else {
                 // Make the move, if an error occurs, prevent change of turn
                 result = board.movePiece(from, to);
-            }
-        }
-
-        // If the move is valid, check for draw offer
-        if (result.message == null || result.message == ReturnPlay.Message.CHECK || result.message == ReturnPlay.Message.CHECKMATE_WHITE_WINS || result.message == ReturnPlay.Message.CHECKMATE_BLACK_WINS) {
-            if (moveParts.length == 3 && move.toLowerCase().contains("draw")) {
-                drawOffered = true;
-            } else {
-                drawOffered = false;
             }
         }
 
