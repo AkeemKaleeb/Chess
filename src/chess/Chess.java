@@ -38,7 +38,7 @@ public class Chess {
         result = handleInput(move);
 
         // If an error occurred, return the error message
-        if (result.message != null) {
+        if (result.message == ReturnPlay.Message.ILLEGAL_MOVE) {
             result.piecesOnBoard = board.getReturnPieces();
             return result;
         }

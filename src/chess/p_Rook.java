@@ -1,6 +1,8 @@
 package chess;
 
 public class p_Rook extends p_Piece {
+    public boolean hasMoved = false;
+
     // Constructor for the Rook piece
     public p_Rook(Position position, Chess.Player player) {
         // Call the superclass constructor with the appropriate piece type based on the player
@@ -43,6 +45,10 @@ public class p_Rook extends p_Piece {
 
         // Check if the destination square is empty or has an opponent's piece
         p_Piece piece = board.getPieceAt(toPosition);
-        return piece == null || piece.getPlayer() != getPlayer(); // Valid if empty or opponent's piece
+        if (piece == null || piece.getPlayer() != getPlayer()) {
+            hasMoved = true;
+            return true;
+        } 
+        return false;
     }
 }

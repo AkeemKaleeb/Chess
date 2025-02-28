@@ -10,7 +10,7 @@ Partners: Kaileb Cole (KJC265), Maxime Deperrois (MDD182)
     X Input Handling
         X Illegal Moves
     - Special Moves
-        - Castling
+        X Castling
         - En Passant
         X Promotion
         X Resign
