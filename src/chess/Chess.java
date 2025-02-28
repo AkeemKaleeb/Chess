@@ -100,6 +100,12 @@ public class Chess {
         // Find the piece at the 'from' position
         p_Piece piece = board.getPieceAt(from);
 
+        // Test for the correct turn order
+        if (piece == null || piece.getPlayer() != currentTurn) {
+            result.message = ReturnPlay.Message.ILLEGAL_MOVE;
+            return result;
+        }
+
         // Handle Three-Part Move
         if (moveParts.length == 3) {
             // If the move is valid, check for draw offer
@@ -117,7 +123,8 @@ public class Chess {
                 result.message = ReturnPlay.Message.ILLEGAL_MOVE;
                 return result;
             }
-        } else {
+        } 
+        else {
             // Check if the move is a pawn reaching the last rank
             if (piece instanceof p_Pawn && (to.getRank() == 0 || to.getRank() == 7)) {
                 result = board.movePiece(from, to, "Q"); // Default to Queen if no promotion piece is specified
@@ -136,7 +143,7 @@ public class Chess {
     }
 
     // Get the current player's turn.
-    public Chess.Player getCurrentTurn() {
+    public static Chess.Player getCurrentTurn() {
         return currentTurn;
     }
 

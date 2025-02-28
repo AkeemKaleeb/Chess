@@ -32,6 +32,7 @@ public class PlayChess {
 			System.out.println();
 			
 			// next line
+			System.out.println("Current Move: " + Chess.getCurrentTurn());
 			line = sc.nextLine();
 		}
 		
