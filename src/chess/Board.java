@@ -3,12 +3,17 @@ package chess;
 import java.util.ArrayList;
 
 public class Board {
-    private p_Piece[][] board; // 2D array representing the chess board
+    private final p_Piece[][] board; // 2D array representing the chess board
 
     // Constructor to initialize the board and reset it to the starting position
-    public Board() {
+    private Board() {
         board = new p_Piece[8][8];
-        resetBoard();
+    }
+
+    public static Board createBoard() {
+        Board board = new Board();
+        board.resetBoard();
+        return board;
     }
 
     // Method to reset the board to the initial chess position

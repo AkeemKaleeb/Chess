@@ -43,6 +43,14 @@ public class Position {
         return file == position.file && rank == position.rank; // Compare file and rank
     }
 
+    // Override the hashCode method to generate a hash code for the Position object
+    @Override
+    public int hashCode() {
+        int result = Integer.hashCode(file);
+        result = 31 * result + Integer.hashCode(rank);
+        return result;
+    }
+
     // Static method to create a Position object from a string (e.g., "a1")
     public static Position fromString(String input) {
         int file = input.charAt(0) - 'a'; // Convert file character to an integer (0-based)

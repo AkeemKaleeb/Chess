@@ -4,18 +4,14 @@ import java.util.ArrayList;
 
 /*
  * TODO: A list of everything left to implement for a presentable project
- * Castling
  * En passant
- * Promotion
- * Checkmate Detection
- * Draw Detection
  * 
  */
 
 
 public class Chess {
 
-    enum Player { white, black }
+    public enum Player { white, black }
     
     private static Player currentTurn;
     private static Board board;
@@ -55,7 +51,7 @@ public class Chess {
     // This method should reset the game, and start from scratch.
     public static void start() {
         // Reset Board and Player Turn
-        board = new Board();
+        board = Board.createBoard();
         currentTurn = Player.white;
         PlayChess.printBoard(board.getReturnPieces());
     }
