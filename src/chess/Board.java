@@ -4,7 +4,13 @@ import java.util.ArrayList;
 
 public class Board {
     private final p_Piece[][] board; // 2D array representing the chess board
-
+    
+    public static class LastMove {
+        private static p_Piece lastPiece;
+        private static Position lastFrom;
+        private static Position lastTo;
+    }
+    
     // Constructor to initialize the board and reset it to the starting position
     private Board() {
         board = new p_Piece[8][8];
@@ -135,7 +141,15 @@ public class Board {
             }
         }
 
+        // Set the last move
+        setLastMove(piece, from, to);
+
         return returnPlay;
+    }
+
+    // Method to remove a piece from the board
+    public void removePieceAt(Position position) {
+        board[position.getFile()][position.getRank()] = null;
     }
 
     // Method to get the piece at a specific position
@@ -170,51 +184,65 @@ public class Board {
         return false;
     }
 
-    
-// Method to check if a player is in checkmate
-public boolean isCheckmate(Chess.Player player) {
-    // First, check if the player is in check
-    if (!isCheck(player)) {
-        return false;
+    public p_Piece getLastPiece() {
+        return LastMove.lastPiece;
     }
 
-    // Iterate through all pieces of the player
-    for (int file = 0; file < 8; file++) {
-        for (int rank = 0; rank < 8; rank++) {
-            p_Piece piece = board[file][rank];
-            if (piece != null && piece.getPlayer() == player) {
-                // Check all possible moves for the piece
-                for (int newFile = 0; newFile < 8; newFile++) {
-                    for (int newRank = 0; newRank < 8; newRank++) {
-                        Position newPosition = new Position(newFile, newRank);
-                        if (piece.isValidMove(newPosition, this)) {
-                            // Make the move temporarily
-                            p_Piece target = board[newFile][newRank];
-                            Position oldPosition = piece.getPosition();
-                            board[newFile][newRank] = piece;
-                            board[file][rank] = null;
-                            piece.setPosition(newPosition);
+    public int getLastMoveDistance() {
+        return Math.abs(LastMove.lastFrom.getRank() - LastMove.lastTo.getRank());
+    }
 
-                            // Check if the player is still in check after the move
-                            boolean stillInCheck = isCheck(player);
+    public void setLastMove(p_Piece lastPiece, Position lastFrom, Position lastTo) {
+        LastMove.lastPiece = lastPiece;
+        LastMove.lastFrom = lastFrom;
+        LastMove.lastTo = lastTo;
+    }
 
-                            // Undo the move
-                            board[file][rank] = piece;
-                            board[newFile][newRank] = target;
-                            piece.setPosition(oldPosition);
+    
+    // Method to check if a player is in checkmate
+    public boolean isCheckmate(Chess.Player player) {
+        // First, check if the player is in check
+        if (!isCheck(player)) {
+            return false;
+        }
 
-                            // If the player is not in check after the move, it's not checkmate
-                            if (!stillInCheck) {
-                                return false;
+        // Iterate through all pieces of the player
+        for (int file = 0; file < 8; file++) {
+            for (int rank = 0; rank < 8; rank++) {
+                p_Piece piece = board[file][rank];
+                if (piece != null && piece.getPlayer() == player) {
+                    // Check all possible moves for the piece
+                    for (int newFile = 0; newFile < 8; newFile++) {
+                        for (int newRank = 0; newRank < 8; newRank++) {
+                            Position newPosition = new Position(newFile, newRank);
+                            if (piece.isValidMove(newPosition, this)) {
+                                // Make the move temporarily
+                                p_Piece target = board[newFile][newRank];
+                                Position oldPosition = piece.getPosition();
+                                board[newFile][newRank] = piece;
+                                board[file][rank] = null;
+                                piece.setPosition(newPosition);
+
+                                // Check if the player is still in check after the move
+                                boolean stillInCheck = isCheck(player);
+
+                                // Undo the move
+                                board[file][rank] = piece;
+                                board[newFile][newRank] = target;
+                                piece.setPosition(oldPosition);
+
+                                // If the player is not in check after the move, it's not checkmate
+                                if (!stillInCheck) {
+                                    return false;
+                                }
                             }
                         }
                     }
                 }
             }
         }
-    }
 
-    // If no valid moves can get the player out of check, it's checkmate
-    return true;
-}
+        // If no valid moves can get the player out of check, it's checkmate
+        return true;
+    }
 }
