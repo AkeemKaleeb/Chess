@@ -21,7 +21,11 @@ public class p_Pawn extends p_Piece {
             return true;
         }
         // Double step forward from the initial position
-        else if (fileDiff == 0 && rankDiff == 2 * direction && currentPosition.getRank() == (getPlayer() == Chess.Player.white ? 1 : 6) && board.getPieceAt(toPosition) == null) {
+         if (fileDiff == 0 && rankDiff == 2 * direction 
+                        && currentPosition.getRank() == (getPlayer() == Chess.Player.white ? 1 : 6) 
+                        && board.getPieceAt(toPosition) == null
+                        && board.getPieceAt(new Position(currentPosition.getFile(), currentPosition.getRank() + direction)) == null) {
+
             return true;
         }
         // En Passant
@@ -32,6 +36,7 @@ public class p_Pawn extends p_Piece {
                     ? ReturnPiece.PieceType.BP 
                     : ReturnPiece.PieceType.WP) 
                 && board.getLastMoveDistance() == 2) {
+
                 
             Position lastPiecePosition = board.getLastPiece().getPosition();
 
