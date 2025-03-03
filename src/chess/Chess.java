@@ -5,13 +5,6 @@ package chess;
 
 import java.util.ArrayList;
 
-/*
- * TODO: A list of everything left to implement for a presentable project
- * En passant
- * 
- */
-
-
 public class Chess {
 
     public enum Player { white, black }
@@ -56,7 +49,7 @@ public class Chess {
         // Reset Board and Player Turn
         board = Board.createBoard();
         currentTurn = Player.white;
-        PlayChess.printBoard(board.getReturnPieces());
+        //PlayChess.printBoard(board.getReturnPieces());
     }
 
     // This method should handle the input processing and moving of the piece.
