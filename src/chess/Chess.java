@@ -1,3 +1,6 @@
+// Kaileb Cole KJC265
+// Maxime Deperrois MDD182
+
 package chess;
 
 import java.util.ArrayList;
