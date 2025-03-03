@@ -14,6 +14,11 @@ public class p_King extends p_Piece {
         // Get the current position of the King
         Position currentPosition = getPosition();
 
+        // Check Board Boundaries
+        if (!toPosition.isValid()) {
+            return false;
+        }
+
         // Calculate the difference in file and rank between the current position and the target position
         int fileDiff = Math.abs(toPosition.getFile() - currentPosition.getFile());
         int rankDiff = Math.abs(toPosition.getRank() - currentPosition.getRank());

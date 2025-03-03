@@ -13,6 +13,11 @@ public class p_Rook extends p_Piece {
     public boolean isValidMove(Position toPosition, Board board) {
         Position currentPosition = getPosition();
 
+        // Check Board Boundaries
+        if (!toPosition.isValid()) {
+            return false;
+        }
+
         // Check if the move is horizontal or vertical
         if (currentPosition.getFile() != toPosition.getFile() && currentPosition.getRank() != toPosition.getRank()) {
             return false; // Rook can only move in straight lines

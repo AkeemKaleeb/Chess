@@ -55,6 +55,11 @@ public class Position {
     public static Position fromString(String input) {
         int file = input.charAt(0) - 'a'; // Convert file character to an integer (0-based)
         int rank = Character.getNumericValue(input.charAt(1)) - 1; // Convert rank character to an integer (0-based)
+        
+        if (file < 0 || file > 7 || rank < 0 || rank > 7) { // Check if the file and rank are within bounds
+            return null; // Return null if out of bounds
+        }
+
         return new Position(file, rank); // Return a new Position object
     }
 }

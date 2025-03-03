@@ -89,6 +89,11 @@ public class Chess {
         Position from = Position.fromString(moveParts[0]);
         Position to = Position.fromString(moveParts[1]);
 
+        if (to == null || from == null) {
+            result.message = ReturnPlay.Message.ILLEGAL_MOVE;
+            return result;
+        }
+
         // Find the piece at the 'from' position
         p_Piece piece = board.getPieceAt(from);
 

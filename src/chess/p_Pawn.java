@@ -10,6 +10,12 @@ public class p_Pawn extends p_Piece {
     @Override
     public boolean isValidMove(Position toPosition, Board board) {
         Position currentPosition = getPosition();
+
+        // Check Board Boundaries
+        if (!toPosition.isValid()) {
+            return false;
+        }
+
         int fileDiff = toPosition.getFile() - currentPosition.getFile();
         int rankDiff = toPosition.getRank() - currentPosition.getRank();
 

@@ -11,6 +11,11 @@ public class p_Queen extends p_Piece {
     public boolean isValidMove(Position toPosition, Board board) {
         Position currentPosition = getPosition();
 
+        // Check Board Boundaries
+        if (!toPosition.isValid()) {
+            return false;
+        }
+
         // Check if the move is diagonal, horizontal, or vertical
         boolean isDiagonal = Math.abs(toPosition.getFile() - currentPosition.getFile()) == Math.abs(toPosition.getRank() - currentPosition.getRank());
         boolean isStraight = currentPosition.getFile() == toPosition.getFile() || currentPosition.getRank() == toPosition.getRank();

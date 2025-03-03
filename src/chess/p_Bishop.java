@@ -11,6 +11,11 @@ public class p_Bishop extends p_Piece {
     public boolean isValidMove(Position toPosition, Board board) {
         Position currentPosition = getPosition();
 
+        // Check Board Boundaries
+        if (!toPosition.isValid()) {
+            return false;
+        }
+
         // Check if the move is diagonal by comparing the absolute difference in file and rank
         if (Math.abs(toPosition.getFile() - currentPosition.getFile()) != Math.abs(toPosition.getRank() - currentPosition.getRank())) {
             return false;
