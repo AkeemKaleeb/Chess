@@ -25,9 +25,21 @@ public class p_Pawn extends p_Piece {
             return true;
         }
         // En Passant
-        else if (Math.abs(fileDiff) == 1 && rankDiff == direction && board.getLastPiece() != null && board.getLastPiece().getType() == (Chess.getCurrentTurn() == Chess.Player.white ? ReturnPiece.PieceType.BP : ReturnPiece.PieceType.WP) && board.getLastMoveDistance() == 2) {
-            board.removePieceAt(board.getLastPiece().getPosition());
-            return true;
+        else if (Math.abs(fileDiff) == 1 
+                && rankDiff == direction 
+                && board.getLastPiece() != null 
+                && board.getLastPiece().getType() == (Chess.getCurrentTurn() == Chess.Player.white 
+                    ? ReturnPiece.PieceType.BP 
+                    : ReturnPiece.PieceType.WP) 
+                && board.getLastMoveDistance() == 2) {
+                
+            Position lastPiecePosition = board.getLastPiece().getPosition();
+
+            // Check that the last piece is adjacent in file and on the same rank we are leaving
+            if(lastPiecePosition.getRank() == currentPosition.getRank() && lastPiecePosition.getFile() == toPosition.getFile()) {
+                board.removePieceAt(board.getLastPiece().getPosition());
+                return true;
+            }
         }
         // Capture move (diagonal)
         else if (Math.abs(fileDiff) == 1 && rankDiff == direction) {
