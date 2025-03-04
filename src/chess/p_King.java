@@ -38,8 +38,7 @@ public class p_King extends p_Piece {
                     }
 
                     // Check if it puts king in check
-                    if(board.movePiece(currentPosition, new Position(i, currentPosition.getRank())).message == ReturnPlay.Message.ILLEGAL_MOVE) {
-                        board.movePiece(new Position(i, currentPosition.getRank()), currentPosition);
+                    if(board.isInCheckAfterMove(currentPosition, new Position(i, currentPosition.getRank()))) {
                         return false;
                     }
                 }
@@ -47,10 +46,6 @@ public class p_King extends p_Piece {
                 if(board.getPieceAt(new Position(7, currentPosition.getRank())) instanceof p_Rook rook) {
                     if(rook.hasMoved) {
                         return false;
-                    }
-                    else {
-                        rook.setPosition(new Position(currentPosition.getFile() + 1, currentPosition.getRank()));
-                        rook.hasMoved = true;
                     }
                 }
                 else {
@@ -67,8 +62,7 @@ public class p_King extends p_Piece {
                     }
 
                     // Check if it puts king in check, only test the first two positions to the left
-                    if(i > 1 && board.movePiece(currentPosition, new Position(i, currentPosition.getRank())).message == ReturnPlay.Message.ILLEGAL_MOVE) {
-                        board.movePiece(new Position(i, currentPosition.getRank()), currentPosition);
+                    if(i > 1 && board.isInCheckAfterMove(currentPosition, new Position(i, currentPosition.getRank()))) {
                         return false;
                     }
                 }
@@ -77,15 +71,22 @@ public class p_King extends p_Piece {
                     if(rook.hasMoved) {
                         return false;
                     }
-                    else {
-                        rook.setPosition(new Position(currentPosition.getFile() - 1, currentPosition.getRank()));
-                        rook.hasMoved = true;
-                    }
                 }
                 else {
                     return false;
                 }
             }
+            // Move the King and the Rook
+            hasMoved = true;
+            if(direction) {
+                board.movePiece(currentPosition, new Position(currentPosition.getFile() + 2, currentPosition.getRank()));
+                board.movePiece(new Position(7, currentPosition.getRank()), new Position(currentPosition.getFile() + 1, currentPosition.getRank()));
+            }
+            else {
+                board.movePiece(currentPosition, new Position(currentPosition.getFile() - 2, currentPosition.getRank()));
+                board.movePiece(new Position(0, currentPosition.getRank()), new Position(currentPosition.getFile() - 1, currentPosition.getRank()));
+            }
+            return true;
         }
         // Get the piece at the destination position
         p_Piece piece = board.getPieceAt(toPosition);

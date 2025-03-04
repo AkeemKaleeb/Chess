@@ -184,6 +184,25 @@ public class Board {
         return false;
     }
 
+    public boolean isInCheckAfterMove(Position from, Position to) {
+        // Temporarily move the piece
+        p_Piece piece = getPieceAt(from);
+        p_Piece target = getPieceAt(to);
+        board[to.getFile()][to.getRank()] = piece;
+        board[from.getFile()][from.getRank()] = null;
+        piece.setPosition(to);
+
+        // Check if the move puts the player in check
+        boolean inCheck = isCheck(piece.getPlayer());
+
+        // Undo the move
+        board[from.getFile()][from.getRank()] = piece;
+        board[to.getFile()][to.getRank()] = target;
+        piece.setPosition(from);
+
+        return inCheck;
+    }
+
     public p_Piece getLastPiece() {
         return LastMove.lastPiece;
     }
