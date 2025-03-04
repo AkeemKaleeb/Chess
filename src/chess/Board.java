@@ -206,50 +206,43 @@ public class Board {
             return false;
         }
 
-        // Find the king's position
-        Position kingPosition = null;
+        // Iterate through all pieces of the player
         for (int file = 0; file < 8; file++) {
             for (int rank = 0; rank < 8; rank++) {
                 p_Piece piece = board[file][rank];
-                if (piece != null && piece.getType() == (player.equals(Chess.Player.white) ? ReturnPiece.PieceType.WK : ReturnPiece.PieceType.BK)) {
-                    kingPosition = new Position(file, rank);
-                    break;
-                }
-            }
-        }
+                if (piece != null && piece.getPlayer() == player) {
+                    // Check all possible moves for the piece
+                    for (int newFile = 0; newFile < 8; newFile++) {
+                        for (int newRank = 0; newRank < 8; newRank++) {
+                            Position newPosition = new Position(newFile, newRank);
+                            if (piece.isValidMove(newPosition, this)) {
+                                // Make the move temporarily
+                                p_Piece target = board[newFile][newRank];
+                                Position oldPosition = piece.getPosition();
+                                board[newFile][newRank] = piece;
+                                board[file][rank] = null;
+                                piece.setPosition(newPosition);
 
-        // Check all possible moves for the king
-        int[] fileOffsets = {-1, -1, -1, 0, 0, 1, 1, 1};
-        int[] rankOffsets = {-1, 0, 1, -1, 1, -1, 0, 1};
-        for (int i = 0; i < 8; i++) {
-            int newFile = kingPosition.getFile() + fileOffsets[i];
-            int newRank = kingPosition.getRank() + rankOffsets[i];
-            if (newFile >= 0 && newFile < 8 && newRank >= 0 && newRank < 8) {
-                Position newPosition = new Position(newFile, newRank);
-                p_Piece target = board[newFile][newRank];
-                if (target == null || target.getPlayer() != player) {
-                    // Check if the king would be in check in the new position
-                    boolean isSafe = true;
-                    for (int file = 0; file < 8; file++) {
-                        for (int rank = 0; rank < 8; rank++) {
-                            p_Piece piece = board[file][rank];
-                            if (piece != null && piece.getPlayer() != player && piece.isValidMove(newPosition, this)) {
-                                isSafe = false;
-                                break;
+                                // Check if the player is still in check after the move
+                                boolean stillInCheck = isCheck(player);
+
+                                // Undo the move
+                                board[file][rank] = piece;
+                                board[newFile][newRank] = target;
+                                piece.setPosition(oldPosition);
+
+                                // If the player is not in check after the move, it's not checkmate
+                                if (!stillInCheck) {
+                                    return false;
+                                }
                             }
                         }
-                        if (!isSafe) {
-                            break;
-                        }
-                    }
-                    if (isSafe) {
-                        return false; // The king has at least one valid move to escape check
                     }
                 }
             }
         }
 
-        // If no valid moves can get the king out of check, it's checkmate
+        // If no valid moves can get the player out of check, it's checkmate
         return true;
     }
 }
